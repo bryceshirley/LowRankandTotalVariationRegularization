@@ -1,3 +1,6 @@
+% Instead of a loop try using reshapes and ignoring the last terms of the
+% matrcies...
+
 function [TVnorm,subGradM] = TotalVariationNormV2(X)
 % [TVnorm,subGradM] = TotalVariationNorm(X) Computes the TV norm of a
 % Matrix and the sub gradient matrix of its total variation.
