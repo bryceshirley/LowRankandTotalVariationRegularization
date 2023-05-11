@@ -1,46 +1,29 @@
+function [XCorrupted,P,XOriginal] = GenerateImage(N,ratio)
+% Inputs:
+% - N: There are N^2 Pixels in Original Image
+% - Ratio: Portion of original image to be removed
+% Outputs:
+% - XOriginal: original Image for data
+% - XCorrupted: Image once data has been removed (ratio portion removed)
+% - P: Matrix with 1s at known pixel positions and 0 otherwise.
 
-% Number of pixels N^2
-N=500;
+% Use phantom function to generate an Original Image
+XOriginal = phantom(N);
 
-% Thickness of stripes (should divide N)
-Ns=10; 
-% Thickness of strips Ns/2 -1
+% Generate a random permutation of the numbers from 1 and N^2
+ind = randperm(N*N);
 
-% Generate test image
-originalImage = phantom(N);
+% Select portion of Random Permutation of indicies
+ind = ind(1:floor(N*N*ratio)); % Select the first "ratio" of ind
 
-% Generate mask of 1s & 0s. When p=1, there is approx (N^2)/2 ones and
-% increase p to lower this.
-%p=1.5;
-%P=((abs(randn(N))-p*abs(randn(N)))>0);
+% Remove "ratio" portion of pixels (generated randomly)
+XVector = reshape(XOriginal,N*N,1);
+XVector(ind) = 0;
+XCorrupted = reshape(XVector,N,N); 
 
-% Gaussian Noise
-Pg = randn(N);
+% P is a Mask that is 1 for all known positions and 0 otherwises
+PVector=ones(N*N,1);
+PVector(ind)=0;
+P = reshape(PVector,N,N);
 
-% Stripe Mask
-% Ps=ones(N);
-% for i=1:N
-% if mod(i,Ns-1) == 0
-% Ps((i-(Ns/2 -1)):i,:) = 0;
-% end
-% end
-%reshape(X,1,[])
-
-% Apply Mask function to image
-%knownPixels = Ps.*Pg.*originalImage;
-
-
-
-figure(1);
-imshow(Pg.*Ps)
-title('Mask')
-figure(2);
-imshow(originalImage)
-title('Original Image')
-figure(3);
-imshow(knownPixels)
-title('Known Pixels')
-
-
-A=((0:10:95)+5);
-B=((0:10:95)+5);
+end
