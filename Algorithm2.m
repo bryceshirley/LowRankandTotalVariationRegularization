@@ -24,7 +24,7 @@ lambda1 = norm(XCorrupted,'fro');
 lambda2 = 0.02*lambda1;
 
 while alphak > tol2
-    [X] = SolveImageCompletion(X0, XCorrupted, P, lambda1,lambda2, mu,kmax,tol1,alphak);
+    [X] = Algorithm1(X0, XCorrupted, P, lambda1,lambda2, mu,kmax,tol1,alphak);
     alphak = alpha*alphak;
     X0 = X;
 end

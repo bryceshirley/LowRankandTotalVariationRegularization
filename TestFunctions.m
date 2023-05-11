@@ -12,7 +12,7 @@ ratio = 0.5;
 % Set Algorithm 2 Parameter Values
 alpha = 0.9;
 mu = 2.2;
-kmax = 1000; 
+kmax = 10; 
 tol1 = 1e-6; 
 tol2 = 1e-5; 
 
