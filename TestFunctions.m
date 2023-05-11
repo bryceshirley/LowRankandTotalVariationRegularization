@@ -12,9 +12,9 @@ ratio = 0.5;
 % Set Algorithm 2 Parameter Values
 alpha = 0.9;
 mu = 2.2;
-kmax = 1000; % Max Iterations for "SolveImageCompletion" aka Algorithm 1
-tol1 = 1e-6; % tolerence for Algorithm 1
-tol2 = 1e-5; % tolerence for Algorithm 2
+kmax = 1000; 
+tol1 = 1e-6; 
+tol2 = 1e-5; 
 
 % Recover Original Image from Corrupted Image
 XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);

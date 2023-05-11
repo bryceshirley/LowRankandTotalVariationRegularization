@@ -3,12 +3,15 @@ function XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Regularization and Its Application to Image Recovery". The function
 % recovers the original image from corrupted data.
 % Inputs:
-% - XCorrupted:
-% - P:
-% - mu:
-% - kmax: 
-% - Tol: 
-% - alpha: 
+% - XCorrupted: Image once data has been removed (ratio portion removed)
+% - P: Matrix with 1s at known pixel positions and 0 otherwise.
+% - mu:Proximal term parameter
+% - kmax: Max Iterations for Algorithm 1
+% - tol1: Tolerence Covergence Parameter for Algorithm 1
+% - tol2: Tolerence for Algorithm 2 on alpha k
+% - alpha: Paramter to reduce the size of TV norm and rank surrogate
+% functions relatuve to the size of Frobenius norm term in the
+% optimization problem.
 % Ouput:
 % - XRecovered: the recovered image.
 
