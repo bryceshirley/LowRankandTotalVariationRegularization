@@ -16,7 +16,7 @@ function [TVnorm,M] = TotalVariationNorm(X)
 
     for i=1:(n-1)
         for j=1:(m-1)
-            M(i,j) = abs(X(i,j)-X(i,j+1))+abs(X(i+1,j)-X(i,j));
+            M(i,j) = abs(X(i+1,j)-X(i,j))+abs(X(i,j)-X(i,j+1));
         end
     end
 

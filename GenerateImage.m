@@ -1,4 +1,4 @@
-function GenerateImage()
+
 % Number of pixels N^2
 N=500;
 
@@ -24,10 +24,10 @@ Pg = randn(N);
 % Ps((i-(Ns/2 -1)):i,:) = 0;
 % end
 % end
-reshape(X,1,[])
+%reshape(X,1,[])
 
 % Apply Mask function to image
-knownPixels = Ps.*Pg.*originalImage;
+%knownPixels = Ps.*Pg.*originalImage;
 
 
 
@@ -44,4 +44,3 @@ title('Known Pixels')
 
 A=((0:10:95)+5);
 B=((0:10:95)+5);
-end

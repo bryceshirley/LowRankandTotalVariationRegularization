@@ -10,5 +10,5 @@ function g = Weighted_Lpnorm_SF(X,lambda,p)
 % - p is the order of L-norm. p=1 would be the surragate function for the
 %   L1-norm
 
-    g = lambda.*X.^p;
+    g = lambda.*(X.^p);
 end

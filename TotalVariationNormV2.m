@@ -1,14 +1,14 @@
 % Instead of a loop try using reshapes and ignoring the last terms of the
 % matrcies...
 
-function [TVnorm,subGradM] = TotalVariationNormV2(X)
-% [TVnorm,subGradM] = TotalVariationNorm(X) Computes the TV norm of a
+function [TVnorm,subGradTVnorm] = TotalVariationNormV2(X)
+% [TVnorm,subGradTVnorm] = TotalVariationNorm(X) Computes the TV norm of a
 % Matrix and the sub gradient matrix of its total variation.
 % INPUTS:
 % - X is a matrix
 % OUTPUTS:
 % - TVnorm is the Total Variation norm of X
-% - subGradM is the sub gradient of total variation matrix of X
+% - subGradTVnorm is the sub gradient of total variation matrix of X
 %
 % The total variation of the matrix can be defined as the sum of the 
 % absolute differences between neighboring elements along the rows and 
@@ -21,7 +21,7 @@ function [TVnorm,subGradM] = TotalVariationNormV2(X)
     % Mx is a matrix of size (n-1)x(m-1) defined in Eq (5)
     %Mx = zeros((n-1),(m-1));
     TVnorm = 0;
-    subGradMx = zeros((n-1),(m-1));
+    subGradTVnorm = zeros((n-1),(m-1));
 
     for i=1:(n-1)
         for j=1:(m-1)
@@ -32,7 +32,7 @@ function [TVnorm,subGradM] = TotalVariationNormV2(X)
             subGradOfAbsDiffTerm1 = SubGradOfAbsDiffTerm(diffTerm1);
 
             % Absolute Difference term 2 |X[i, j+1] - X[i, j]|
-            diffTerm2 = X(i+1,j)-X(i,j);
+            diffTerm2 = X(i,j+1)-X(i,j);
             subGradOfAbsDiffTerm2 = SubGradOfAbsDiffTerm(diffTerm2);
  
             % Matrix from norm formula
@@ -41,7 +41,7 @@ function [TVnorm,subGradM] = TotalVariationNormV2(X)
             % Compute Total Variation Norm Sum
             TVnorm = TVnorm + abs(diffTerm1)+abs(diffTerm2);
             % Sub Gradient Matrix of TVnorm
-            subGradMx(i,j) = subGradOfAbsDiffTerm1 + subGradOfAbsDiffTerm2;
+            subGradTVnorm(i,j) = subGradOfAbsDiffTerm1 + subGradOfAbsDiffTerm2;
         end
     end
 
@@ -57,7 +57,7 @@ function subGradOfAbsDiffTerm = SubGradOfAbsDiffTerm(diffTerm)
     elseif diffTerm < 0
         subGradOfAbsDiffTerm = -1;
     else % Equality
-        % subGradMx(i,j) can take any value between 0 and 1. 
+        % subGradMx(i,j) can take any value between -1 and 1. 
         % Choose 0.
         subGradOfAbsDiffTerm = 0;
     end

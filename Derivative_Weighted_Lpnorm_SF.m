@@ -10,5 +10,5 @@ function dg = Derivative_Weighted_Lpnorm_SF(X,lambda,p)
 % - p is the order of L-norm. p=1 would be the surragate function for the
 %   L1-norm
 
-    dg = p.*lambda.*X.^(p-1);
+    dg = p.*lambda.*(X.^(p-1));
 end
