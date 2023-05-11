@@ -16,8 +16,8 @@ function tk = Computetk(Xk,subGradTVnorm,P,M,lambda2)
 
 
 % Subgradient of square of the Frobenius Norm
-subGradFROnorm = 2*P.*(Xk-M); % HUSSAM TO CHECK (if 1/norm is not needed)
-
+%subGradFROnorm = 2*P.*(Xk-M); % HUSSAM TO CHECK (if 1/norm is not needed)
+subGradFROnorm = P.*(Xk-M);
 
 % Compute subgradient of F at Xk
 tk = lambda2*subGradTVnorm + subGradFROnorm;
