@@ -1,5 +1,5 @@
 
-N=200;
+N=50;
 % N^2 Pixels in Original Image
 XOriginal = phantom(N);
 
@@ -41,10 +41,10 @@ alphak = alpha;
 lambda1 = norm(M,'fro');
 lambda2 = 0.02*lambda1;
 mu = 1.1;
-kmax = 10;
+kmax = 300;
 Tol = 1e-6;
 while alphak > tol
-    [X] = SolveImageCompletion(X0, M, P, lambda1,lambda2, mu,kmax,Tol); % Should alpha_k be a parameter?
+    [X] = SolveImageCompletion(X0, M, P, lambda1,lambda2, mu,kmax,Tol,alphak); % Should alpha_k be a parameter?
     alphak = alpha*alphak;
     X0 = X;
 end
