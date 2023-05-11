@@ -1,5 +1,7 @@
 function [Xk] = SolveImageCompletion(X0, M, P, lambda1,lambda2, mu,kmax,Tol,alphak)
 % Solves image completion using low-rank and total variation regularization
+% This is Algorithm 1 in the paper "Low-Rank and Total Variation Regularization
+% and Its Application to Image Recovery"
 % Input:
 % - X0: Initial guess
 % - M: Observed image (values we know)

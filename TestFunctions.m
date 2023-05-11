@@ -11,13 +11,13 @@ ratio = 0.5;
 
 % Set Algorithm 2 Parameter Values
 alpha = 0.9;
-tol = 1e-5;
-mu = 1.1;
-kmax = 10;
-Tol = 1e-6;
+mu = 2.2;
+kmax = 300; % Max Iterations for "SolveImageCompletion" aka Algorithm 1
+tol1 = 1e-6; % tolerence for Algorithm 1
+tol2 = 1e-5; % tolerence for Algorithm 2
 
 % Recover Original Image from Corrupted Image
-XRecovered = Algorithm2(XCorrupted,P,mu,kmax,Tol,alpha);
+XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha);
 
 
 % Plot results
