@@ -3,21 +3,21 @@
 % N^2 Pixels in Original Image
 N=50;
 
-% Portion of original image to be removed
+% Portion of original image to be removed (/Corrupted)
 ratio = 0.5;
 
 % Generate Image, Mask and Corrupted Image
-[XCorrupted,P,XOriginal] = GenerateImage(N,ratio);
+[XCorrupted,KnownPixels,XOriginal] = GenerateImage(N,ratio);
 
 % Set Algorithm 2 Parameter Values
 alpha = 0.9;
 mu = 2.2;
-kmax = 300; % Max Iterations for "SolveImageCompletion" aka Algorithm 1
+kmax = 1000; % Max Iterations for "SolveImageCompletion" aka Algorithm 1
 tol1 = 1e-6; % tolerence for Algorithm 1
 tol2 = 1e-5; % tolerence for Algorithm 2
 
 % Recover Original Image from Corrupted Image
-XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha);
+XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
 
 
 % Plot results
