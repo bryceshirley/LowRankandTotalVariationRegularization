@@ -42,14 +42,14 @@ function subGradTVnorm = SubGradTVNorm(X)
 
     % b) Compute X(i, j) - X(i, j+1)
     XColBoundary = [X,zeros(n,1)];
-    colNeighboursDiff = diff(XColBoundary')';
+    colNeighboursDiff = diff(XColBoundary,1,2); 
     
 
     %% Compute contributions from Mx(i,j-1) (containing X(i,j))
     
     % Compute X(i, j-1) - X(i, j)
     XColBoundaryLeft = [zeros(n,1),X]; 
-    colNeighboursDiffLeft = diff(XColBoundaryLeft')';
+    colNeighboursDiffLeft = diff(XColBoundaryLeft,1,2);
 
     %% Contributions from Mx(i-1,j) (containing X(i,j))
     

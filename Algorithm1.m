@@ -1,4 +1,4 @@
-function [Xk] = Algorithm1(X0, M, P, lambda1,lambda2, mu,kmax,Tol,alphak)
+function [Xk] = Algorithm1(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
 % Solves image completion using low-rank and total variation regularization
 % Input:
 % - X0: Initial guess
@@ -21,14 +21,15 @@ while k < kmax
 %while true
     % Compute sub-gradient
     [~, S, ~] = svd(Xk,'econ');
-    p=2; % Lp norm
-    w = alphak*Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p);
+    p=1; % Lp norm (has to be <=1)
+    %w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
+    w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p);
     
     % Compute the subgradient of the TV norm of Xk
     subGradTVnorm = SubGradTVNorm(Xk);
     
     % Compute tk
-    tk = Computetk(Xk,subGradTVnorm,P,M,lambda2,alphak);
+    tk = Computetk(Xk,subGradTVnorm,P,M,lambda2);
     
     % Define Y
     Y = Xk - (1/mu)*tk;
