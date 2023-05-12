@@ -15,18 +15,24 @@ function XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Ouput:
 % - XRecovered: the recovered image.
 
-% Set Initial Guess
-X0 = XCorrupted;
+% XCurroputed is M in the paper.
+
+% Set Initial Guess 
+X0 = XCorrupted; 
 
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
 lambda2 = 0.02*lambda1;
+mu = GenerateMu(X0,lambda2, P, XCorrupted);
 
 while alphak > tol2
-    [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    [X] = Algorithm1(X0, XCorrupted, P, lambda1,lambda2, mu,kmax,tol1);
     alphak = alpha*alphak;
+    lambda1 = lambda1*(alphak*5e-2);
+    lambda2 = lambda2*(alphak*5e-2);
     X0 = X;
+    mu = GenerateMu(X0,lambda2, P, XCorrupted);
     imshow(X);
 end
 
