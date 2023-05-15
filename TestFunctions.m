@@ -1,10 +1,12 @@
+addpath ('AlgorithmFunctions\','Algorithms\')
+
 %% Generate Image/Corrupted Image
 
 % N^2 Pixels in Original Image
 N=400;
 
 % Portion of original image to be removed (/Corrupted)
-ratio = 0.9;
+ratio = 0.5;
 
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
 [XCorrupted,KnownPixels,XOriginal] = GenerateImage(N,ratio);
