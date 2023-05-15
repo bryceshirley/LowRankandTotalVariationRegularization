@@ -113,25 +113,11 @@ disp('Qu2-5) ')
 disp('~~~~~~~')
 disp(' ')
 disp('Computation time for Multilinear SVD:')
-% Qu2 Compute G= X *_1 U1' *_2 U2' *_3 U3'
+
 
 % Using Classic svd
 tic;
-[U1,S1,V1] = ComputeSVDUnfoldedxTensor(X,1); % mode-1
-[U2,S2,V2] = ComputeSVDUnfoldedxTensor(X,2); % mode-2
-[U3,S3,V3] = ComputeSVDUnfoldedxTensor(X,3); % mode-3
-
-% Compute G
-G1 = TensorMatrixProduct(X,U1',1);
-G2 = TensorMatrixProduct(G1,U2',2);
-G = TensorMatrixProduct(G2,U3',3);
-
-% Qu3 Compute Y= G *_1 U1 *_2 U2 _3 U3
-
-% Compute Y
-Y1 = TensorMatrixProduct(G,U1,1);
-Y2 = TensorMatrixProduct(Y1,U2,2);
-Y = TensorMatrixProduct(Y2,U3,3);
+Y = TensorSVD(X);
 toc;
 
 % Qu4 Compute X-Y
@@ -148,23 +134,14 @@ disp('Qu5)')
 disp('~~~~~~~')
 disp(' ')
 disp('Computation time for trunctated Multilinear SVD:')
+
 tic;
-% Using truncated svd
-[Ut1,St1,Vt1] = ComputeTruncatedSVDUnfoldedxTensor(X,tau,1); % mode-1
-[Ut2,St2,Vt2] = ComputeTruncatedSVDUnfoldedxTensor(X,tau,2); % mode-2
-[Ut3,St3,Vt3] = ComputeTruncatedSVDUnfoldedxTensor(X,tau,3); % mode-3
-
-% Compute G
-G1 = TensorMatrixProduct(X,Ut1',1);
-G2 = TensorMatrixProduct(G1,Ut2',2);
-G = TensorMatrixProduct(G2,Ut3',3);
-
-% Compute Y
-Y1 = TensorMatrixProduct(G,Ut1,1);
-Y2 = TensorMatrixProduct(Y1,Ut2,2);
-Y = TensorMatrixProduct(Y2,Ut3,3);
+% Compute Truncated SVD Approximation of a X
+Y = TensorTruncSVD(X,tau);
 toc;
+
 disp(' ')
+
 % Compute the relative Frobenius Norm between X and truncated Y
 disp('Relative Frobenius Norm:')
 relativeFrobeniusNorm = norm(X-Y, 'fro')/norm(X,'fro');
@@ -182,20 +159,10 @@ disp('~~~~~~~')
 disp(' ')
 disp('Computation time for Randomized Trunctated Multilinear SVD:')
 tic;
-% Using truncated svd
-[Ut1,St1,Vt1] = ComputeRandomizedTruncatedSVDUnfoldedxTensor(X,tau,1,r); % mode-1
-[Ut2,St2,Vt2] = ComputeRandomizedTruncatedSVDUnfoldedxTensor(X,tau,2,r); % mode-2
-[Ut3,St3,Vt3] = ComputeRandomizedTruncatedSVDUnfoldedxTensor(X,tau,3,r); % mode-3
 
-% Compute G
-G1 = TensorMatrixProduct(X,Ut1',1);
-G2 = TensorMatrixProduct(G1,Ut2',2);
-G = TensorMatrixProduct(G2,Ut3',3);
+% Compute Randomized Truncated SVD Approximation of a X
+Y = TensorRandTruncSVD(X,tau,r); 
 
-% Compute Y
-Y1 = TensorMatrixProduct(G,Ut1,1);
-Y2 = TensorMatrixProduct(Y1,Ut2,2);
-Y = TensorMatrixProduct(Y2,Ut3,3);
 toc;
 disp(' ')
 

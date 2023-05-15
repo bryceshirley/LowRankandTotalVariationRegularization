@@ -1,4 +1,4 @@
-addpath ('AlgorithmFunctions\','Algorithms\')
+addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\')
 
 %% Generate Image/Corrupted Image
 
@@ -9,7 +9,7 @@ N=400;
 ratio = 0.5;
 
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
-[XCorrupted,KnownPixels,XOriginal] = GenerateImage(N,ratio);
+[XCorruptedL1,KnownPixelsL1,XOriginal] = GenerateImageTensor(N,ratio);
 
 %% Run Algorithm 2: To Reconstruct Image
 
