@@ -1,11 +1,14 @@
-function mu = GenerateMu(X0,lambda2, P, M)
+function mu = GenerateMu(X0,X,lambda2, P, M)
 % This function Generate the proximal parameter by finding the upper bound
 % on the Lipchitz constant.
 % Inputs:
 % - lambda2: weighting on the Total Variation(TV) norm
 % - P: is a matrix of 1s in the known true value positions and 0 otherwise
-% - M: is a matrix of known true values
-% - X0: a matrix in real(m,n)
+% - M: is a matrix of known true values (aka XCorrupted)
+% - X0: a matrix in real(m,n) is the previous iteration of image 
+%   reconstruction.
+% - X: a matrix in real(m,n) is the current iteration of image 
+%   reconstruction 
 % Output:
 % - mu: the proximal parameter for algorithms.
 
@@ -18,16 +21,15 @@ function mu = GenerateMu(X0,lambda2, P, M)
     % Calculate sub grad of TV norm Lipchithz condition
     [n,m] = size(X0);
     
-    
     % Generate Random matrix with same dimensions of X0
-    XRand = randn(n,m);
+    %XRand = randn(n,m);
 
     % Compute Left hand side and right hand side of Lipchitz equation
-    [LHS,RHS] = GenerateEquation(X0,XRand,S);
+    [LHS,RHS] = GenerateEquation(X0,X,S);
 
     % Ensure mu>0 and defined 
-    while (RHS == 0) || (LHS==0) 
-        XRand = randn(n,m);
+    while (RHS == 0) || (LHS==0)
+        XRand = X+randn(n,m);
         [LHS,RHS] = GenerateEquation(X0,XRand,S);
     end
     

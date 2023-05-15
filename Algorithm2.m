@@ -3,7 +3,7 @@ function XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Regularization and Its Application to Image Recovery". The function
 % recovers the original image from corrupted data.
 % Inputs:
-% - XCorrupted: Image once data has been removed (ratio portion removed)
+% - XCorrupted: Image once data has been removed (ratio portion removed).
 % - P: Matrix with 1s at known pixel positions and 0 otherwise.
 % - mu:Proximal term parameter
 % - kmax: Max Iterations for Algorithm 1
@@ -24,15 +24,22 @@ X0 = XCorrupted;
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
 lambda2 = 0.02*lambda1;
-mu = GenerateMu(X0,lambda2, P, XCorrupted);
+%mu = GenerateMu(X0,lambda2, P, XCorrupted);
 
 while alphak > tol2
+    % Use Algorithm1 to compute next image iteration
     [X] = Algorithm1(X0, XCorrupted, P, lambda1,lambda2, mu,kmax,tol1);
+
+    % Update parameters
     alphak = alpha*alphak;
-    lambda1 = lambda1*(alphak*5e-2);
-    lambda2 = lambda2*(alphak*5e-2);
+    lambda1 = lambda1*(alpha*5e-2);
+    lambda2 = lambda2*(alpha*5e-2);
+    mu = GenerateMu(X0,X,lambda2, P, XCorrupted);
+    
+    % Update X0
     X0 = X;
-    mu = GenerateMu(X0,lambda2, P, XCorrupted);
+
+    % Display Image Iteration
     imshow(X);
 end
 

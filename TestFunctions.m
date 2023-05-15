@@ -1,18 +1,20 @@
+clear all;
+close all;
 %% Generate Image/Corrupted Image
 
 % N^2 Pixels in Original Image
 N=400;
 
 % Portion of original image to be removed (/Corrupted)
-ratio = 0.8;
+ratio = 0.5;
 
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
-[XCorrupted,KnownPixels,XOriginal] = GenerateImage(N,ratio);
+[XCorrupted,KnownPixels,XOriginal] = GenerateImage(N,ratio); % XCorrupted is M in the paper
 
 %% Run Algorithm 2: To Reconstruct Image
 
 alpha = 0.95;
-mu = 2.2; % Proximal term parameter
+mu0 = 2.2; % Initial proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1
@@ -20,7 +22,7 @@ tol1 = 1e-6; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-5; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
-XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+XRecovered = Algorithm2(XCorrupted,KnownPixels,mu0,kmax,tol1,tol2,alpha);
 
 %% Calculate the Relative Frobenius Norms
 
