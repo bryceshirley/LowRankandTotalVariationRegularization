@@ -1,6 +1,6 @@
-function [XCorrupted,P,XOriginal] = GenerateImage(N,ratio)
+function [XCorrupted,P,XOriginal] = GenerateImage(imageMatrix,ratio)
 % Inputs:
-% - N: There are N^2 Pixels in Original Image
+% - imageMatrix: An Image in double matrix form
 % - Ratio: Portion of original image to be removed
 % Outputs:
 % - XOriginal: original Image for data
@@ -8,22 +8,23 @@ function [XCorrupted,P,XOriginal] = GenerateImage(N,ratio)
 % - P: Matrix with 1s at known pixel positions and 0 otherwise.
 
 % Use phantom function to generate an Original Image
-XOriginal = phantom(N);
+XOriginal = imageMatrix;
 
+% Dimaension of Image
+[n,m]=size(XOriginal);
 % Generate a random permutation of the numbers from 1 and N^2
-ind = randperm(N*N);
+ind = randperm(n*m);
 
 % Select portion of Random Permutation of indicies
-ind = ind(1:floor(N*N*ratio)); % Select the first "ratio" of ind
+ind = ind(1:floor(n*m*ratio)); % Select the first "ratio" of ind
 
 % Remove "ratio" portion of pixels (generated randomly)
-XVector = reshape(XOriginal,N*N,1);
+XVector = reshape(XOriginal,n*m,1);
 XVector(ind) = 0;
-XCorrupted = reshape(XVector,N,N); 
+XCorrupted = reshape(XVector,n,m); 
 
 % P is a Mask that is 1 for all known positions and 0 otherwises
-PVector=ones(N*N,1);
+PVector=ones(n*m,1);
 PVector(ind)=0;
-P = reshape(PVector,N,N);
-
+P = reshape(PVector,n,m);
 end
