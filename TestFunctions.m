@@ -19,8 +19,8 @@ mu = 2.2; % Proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1
-tol1 = 1e-6; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-5; % Tolerence for Algorithm 2 on alpha k
+tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
+tol2 = 1e-6; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
 XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
