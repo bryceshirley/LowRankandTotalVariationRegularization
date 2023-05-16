@@ -1,10 +1,10 @@
 %% Generate Image/Corrupted Image
 
 % Generate or Import image
-%N=400;% N^2 Pixels in Phantom Image
-%imageMatrix = phantom(N);
-imageMatrix = imread('AlanTuring.jpg');
-imageMatrix= im2double(imageMatrix(:,:,1));
+N=400;% N^2 Pixels in Phantom Image
+imageMatrix = phantom(N);
+% imageMatrix = imread('AlanTuring.jpg');
+% imageMatrix= im2double(imageMatrix(:,:,1));
 
 % Portion of original image to be removed (/Corrupted)
 ratio = 0.8;
@@ -15,7 +15,7 @@ ratio = 0.8;
 %% Run Algorithm 2: To Reconstruct Image
 
 alpha = 0.95;
-mu = 2.2; % Proximal term parameter
+mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1

@@ -22,8 +22,8 @@ while k < kmax
     % Compute sub-gradient
     [~, S, ~] = svd(Xk,'econ');
     p=1; % Lp norm (has to be <=1)
-    %w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
-    w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p);
+    w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
+    %w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p);
     
     % Compute the subgradient of the TV norm of Xk
     subGradTVnorm = SubGradTVNorm(Xk);
