@@ -25,8 +25,8 @@ tol1 = 1e-6; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-5; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
-XRecovered = Algorithm2_Tensor(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
-%XRecovered = Algorithm2_TensorV2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+%XRecovered = Algorithm2_Tensor(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+XRecovered = Algorithm2_TensorV2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
 %% Calculate the Relative Frobenius Norms
 
 % Display Relative Frobenius Norms
