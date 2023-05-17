@@ -17,10 +17,19 @@ function [Xk] = Algorithm1(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
 k = 0;
 Xk = X0;
 
+% Choose A singular value value to be approximated as 0 when approximating
+% r (r is a rank approximation).
+zeroSingularTol=1e-10;
+
 while k < kmax
 %while true
     % Compute sub-gradient
-    [~, S, ~] = svd(Xk,'econ');
+    if k ==0
+        [~, S, ~] = svd(Xk,'econ');
+        r1 = length(find(diag(S)>zeroSingularTol));
+    else
+        [~,S,~] = RandomizedSVD(Xk,r1);
+    end
     p=1; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
     
@@ -34,7 +43,12 @@ while k < kmax
     Y = Xk - (1/mu)*tk;
     
     % Compute Xk+1
-    [U, S, V] = svd(Y,'econ');
+    if k==0
+        [U, S, V] = svd(Y,'econ');
+        r2 = length(find(diag(S)>zeroSingularTol));
+    else
+        [~,S,~] = RandomizedSVD(Y,r1);
+    end
     Sw = shrinkage(diag(S), w);
     ind = find(Sw>0);
     X_new = U(:,ind) * diag(Sw(ind)) * V(:,ind)';
