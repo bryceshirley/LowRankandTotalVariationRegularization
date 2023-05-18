@@ -20,5 +20,5 @@ Xn = reshape(reshape(x,n,m*r)',m,r*n);
 
 else 
 % Horizontal slices (cols are tube fibres) mode 3
-Xn = reshape(x,n*m,[])';
+Xn = reshape(x,n*m,r)';
 end
