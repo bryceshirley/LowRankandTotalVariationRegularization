@@ -12,6 +12,7 @@ ratio = 0.8;
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
 [XCorrupted,KnownPixels,XOriginal] = GenerateImage(imageMatrix,ratio);
 
+imshow(XCorrupted)
 %% Run Algorithm 2: To Reconstruct Image
 
 alpha = 0.95;
