@@ -1,10 +1,10 @@
 %% Generate Image/Corrupted Image
 
 % Generate or Import image
-% N=400;% N^2 Pixels in Phantom Image
-% imageMatrix = phantom(N);
-imageMatrix = imread('AlanTuring.jpg');
-imageMatrix= im2double(imageMatrix(:,:,1));
+N=500;% N^2 Pixels in Phantom Image
+imageMatrix = phantom(N);
+% imageMatrix = imread('AlanTuring.jpg');
+% imageMatrix= im2double(imageMatrix(:,:,1));
 
 % Portion of original image to be removed (/Corrupted)
 ratio = 0.8;
@@ -12,6 +12,7 @@ ratio = 0.8;
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
 [XCorrupted,KnownPixels,XOriginal] = GenerateImage(imageMatrix,ratio);
 
+imshow(XCorrupted)
 %% Run Algorithm 2: To Reconstruct Image
 
 alpha = 0.95;

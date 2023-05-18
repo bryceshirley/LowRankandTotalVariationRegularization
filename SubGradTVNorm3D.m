@@ -11,21 +11,19 @@ function subGradTVnorm3D = SubGradTVNorm3D(X)
 % columns.
 %
 % We Define the TV norm TV(x) as:
-% TV(X) = ∑_{i=1}^{m} ∑_{j=1}^{n} Mx(i,j)
-% Where, Mx(i,j) = |X(i, j) - X(i, j+1)| + |X(i+1, j) - X(i, j)|
+% TV(X) = ∑_{i=1}^{m} ∑_{j=1}^{n} ∑_{k=1}^{r} Tx(i,j,k)
+% Where, Tx(i,j,k) = |X(i, j, k) - X(i, j+1, k)| + 
+%                    |X(i+1, j, k) - X(i, j, k)| +
+%                    |X(i, j, k) - X(i, j, k+1)|
 % 
 % Introduce sharp boundary conditions of 0 to represent the edge of the 
 % image.
 %
-% When taking the subgradient we form a Jacobian matrix where each in
-% postion (i,j) is the partial derivative of sum TV(X) with respect to
-% X(i,j).
+% When taking the subgradient we form a Jacobian Tensor where each in
+% postion (i,j,k) is the partial derivative of sum TV(X) with respect to
+% X(i,j,k).
 % 
 % NOTE:
-% Most of the contributions of the sum TV(x) are lost when taking
-% partial derivatives w.r.t X(i,j). The contributions that remain are 1 
-% from Mx(i-1,j), 1 from Mx(i,j-1) and 2 from Mx(i,j) (calculated 
-% already above).
 % Subgradient of a function |x|=0 is -1 for x<0, 1 x>0 and can take any
 % value between -1 and 1 for x=0 (we choose 0 for convinience). Hence,
 % the sign function is suitable for this task.
@@ -33,32 +31,40 @@ function subGradTVnorm3D = SubGradTVNorm3D(X)
     % find rows and columns of X
     [n,m,r] = size(X);
 
+    %% Contributions from Tx(i,j,k)
+
+    % X forward unfolding - Differences taken forward
+    % (Rows of matrix go through layers of images)
+    XF = [reshape(X,n*m,r),zeros(n*m,1)]; % zero boundary condition applied
+    TxF = -reshape(diff(XF,1,2),n,m,r); % Take difference and reshape to Tensor
     
-    %% Compute Mx(i,j) terms in as defined above
+    % X Column unfolding - Differences taken to the right.
+    % (columns of matrix are column fibres in the images)
+    XR = [reshape(X,n,m*r);zeros(1,m*r)];
+    TxR = -reshape(diff(XR,1,1),n,m,r);
 
-    % a) Compute X(i+1, j) - X(i, j)
-    XD = [X;zeros(1,m)]; % Choose sharp Boundary Values as zeros
-    MxD = - diff(XD,1,1); % Negate sign to remove skew
+    % X Row unfolding - Differences taken down.
+    % (columns of matrix are row fibres in the images)
+    XD = [reshape(reshape(X,n,m*r)',m,n*r);zeros(1,n*r)];
+    TxD = -reshape(reshape(diff(XD,1,1),m*r,n)',n,m,r);
 
-    % b) Compute X(i, j) - X(i, j+1)
-    XR = [X,zeros(n,1)];
-    MxR = - diff(XR,1,2); % Negate signs to remove skew
-    
+    %% Contributions from Tx(i,j,k-1)
+    % X backword unfolding - Differences taken Backward
+    XB = [zeros(n*m,1),reshape(X,n*m,r)];
+    TxB = reshape(diff(XB,1,2),n,m,r); 
 
-    %% Compute contributions from Mx(i,j-1) (containing X(i,j))
-    
-    % Compute X(i, j-1) - X(i, j)
-    XL = [zeros(n,1),X];
-    MxL = diff(XL,1,2);
+    %% Contributions from Tx(i,j-1,k)
+    % X Column unfolding - Differences taken to the left.
+    XL = [zeros(1,m*r); reshape(X,n,m*r)];
+    TxL = reshape(diff(XL,1,1),n,m,r);
 
-    %% Contributions from Mx(i-1,j) (containing X(i,j))
-    
-    % Compute X(i, j) - X(i-1, j)
-    XU = [zeros(1,m); X]; 
-    MxU = diff(XU,1,1);
-
+    %% Contributions from Tx(i,j,k-1)
+    % X Row unfolding - Differences taken Up.
+    XU = [zeros(1,n*r);reshape(reshape(X,n,m*r)',m,n*r)];
+    TxU = reshape(reshape(diff(XU,1,1),m*r,n)',n,m,r);
     
     %% Compute The Subgradient for Each Term and Sum For Subgradient of TV
-    subGradTVnorm = sign(MxL) + sign(MxR) + sign(MxD) + sign(MxU);
+    subGradTVnorm3D = sign(TxL) + sign(TxR) + sign(TxD) + sign(TxU) + ...
+        + sign(TxF) +sign(TxB);
 
 end
