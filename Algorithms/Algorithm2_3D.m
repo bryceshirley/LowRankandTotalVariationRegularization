@@ -24,7 +24,7 @@ lambda1 = norm(XCorrupted,'fro');
 lambda2 = 0.02*lambda1;
 
 while alphak > tol2
-    [X] = Algorithm1_3D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    [X] = Algorithm1_3DV2(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
     alphak = alpha*alphak;
     X0 = X;
 
