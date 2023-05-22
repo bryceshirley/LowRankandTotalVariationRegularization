@@ -1,4 +1,4 @@
-function [Xk] = Algorithm1(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
+function [Xk] = Algorithm1_TruncationInvestigations(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
 % Solves image completion using low-rank and total variation regularization
 % Input:
 % - X0: Initial guess
@@ -17,10 +17,12 @@ function [Xk] = Algorithm1(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
 k = 0;
 Xk = X0;
 
+
 while k < kmax
 %while true
     % Compute sub-gradient
     [~, S, ~] = svd(Xk,'econ');
+    semilogy(1:size(S,1),diag(S));
     p=1; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
     
@@ -35,10 +37,12 @@ while k < kmax
     
     % Compute Xk+1
     [U, S, V] = svd(Y,'econ');
+    semilogy(1:size(S,1),diag(S));
     Sw = shrinkage(diag(S), w);
+    semilogy(1:size(S,1),diag(S));
     ind = find(Sw>0);
     X_new = U(:,ind) * diag(Sw(ind)) * V(:,ind)';
-    
+    semilogy(1:size(S,1),diag(S));
     % Check for convergence
     if norm(X_new - Xk, 'fro') < Tol*norm(Xk, 'fro')
         Xk = X_new;
