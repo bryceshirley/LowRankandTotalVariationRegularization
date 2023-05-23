@@ -1,10 +1,10 @@
 %% Generate Image/Corrupted Image
 
 % Generate or Import image
-N=500;% N^2 Pixels in Phantom Image
-imageMatrix = phantom(N);
-% imageMatrix = imread('AlanTuring.jpg');
-% imageMatrix= im2double(imageMatrix(:,:,1));
+% N=500;% N^2 Pixels in Phantom Image
+% imageMatrix = phantom(N);
+imageMatrix = imread('AlanTuring.jpg');
+imageMatrix= im2double(imageMatrix(:,:,1));
 
 % Portion of original image to be removed (/Corrupted)
 ratio = 0.8;
