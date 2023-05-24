@@ -47,9 +47,7 @@ while k < kmax
     [U, S, V] = svd(Y3,'econ');
     Sw = shrinkage(diag(S), w);
     ind = find(Sw>0);
-    tic;
     X_new = U(:,ind) * diag(Sw(ind)) * V(:,ind)';
-    toc;
     % Reshape back to tensor
     X_new = reshape(X_new',n,m,r); 
     

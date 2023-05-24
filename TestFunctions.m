@@ -3,7 +3,7 @@ addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\')
 %% Generate Image/Corrupted Image
 
 % N^2 Pixels in Original Image
-N=200;
+N=100;
 
 % Portion of original image to be removed (/Corrupted)
 ratio = 0.8;
