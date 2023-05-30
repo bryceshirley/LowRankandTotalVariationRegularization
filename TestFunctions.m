@@ -3,10 +3,10 @@ addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\')
 %% Generate Image/Corrupted Image
 
 % N^2 Pixels in Original Image
-N=100;
+N=50;
 
 % Portion of original image to be removed (/Corrupted)
-ratio = 0.8;
+ratio = 0.5;
 
 % Number of layers in the 
 NeLayers = 10;
