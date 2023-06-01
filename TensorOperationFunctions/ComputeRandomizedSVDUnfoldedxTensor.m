@@ -5,5 +5,5 @@ function [Un,Sn,Vn] = ComputeRandomizedSVDUnfoldedxTensor(X,n,r)
 Xn = UnfoldTensor(X,n);
 
 % Compute the randomized SVD of mode-n unfolded matrix form
-[Un,Sn,Vn] = randomizedSVD(Xn,r);
+[Un,Sn,Vn] = RandomizedSVD(Xn,r);
 end

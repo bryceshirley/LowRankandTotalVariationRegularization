@@ -3,13 +3,13 @@ addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\')
 %% Generate Image/Corrupted Image
 
 % N^2 Pixels in Original Image
-N=50;
+N=400;
 
 % Portion of original image to be removed (/Corrupted)
-ratio = 0.5;
+ratio = 0.8;
 
 % Number of layers in the 
-NeLayers = 10;
+NeLayers = 20;
 
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
 [XCorrupted,KnownPixels,XOriginal] = GenerateImageTensor(N,ratio,NeLayers);
@@ -17,7 +17,7 @@ NeLayers = 10;
 %% Run Algorithm 2: To Reconstruct Image
 
 alpha = 0.95;
-mu = 2.2; % Proximal term parameter
+mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1

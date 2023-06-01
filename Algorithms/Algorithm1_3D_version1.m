@@ -34,7 +34,7 @@ while k < kmax
 
     
     % Compute the subgradient of the TV norm of Xk
-    subGradTVnorm3D = SubGradTVNorm3D(Xk); %Tensor
+    subGradTVnorm3D = SubGradTVNorm3D_OLD(Xk); %Tensor
     
     % Compute tk
     tk = Computetk(Xk,subGradTVnorm3D,P,M,lambda2); % Tensor

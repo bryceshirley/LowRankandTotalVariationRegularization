@@ -38,7 +38,7 @@ while k < kmax
     Uw3 = LowRankContribution(Y,Xk,3,lambda1,p,mu);
 
     % Use Multilinear SVD to Reconstuct X_{k+1} from X_{k} 
-    X_new = MultilinearSVD(Xk,Uw1,Uw2,Uw3);
+    X_new = ReconstructX(Y,Uw1,Uw2,Uw3);
     
     % Check for convergence
     if norm(X_new - Xk, 'fro') < Tol*norm(Xk, 'fro')
