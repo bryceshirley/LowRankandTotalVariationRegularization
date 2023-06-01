@@ -24,7 +24,7 @@ lambda1 = norm(XCorrupted,'fro');
 lambda2 = 0.2*lambda1;
 
 while alphak > tol2
-    [X] = Algorithm1_TruncationInvestigations(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    [X] = Algorithm1Randomized_V2(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
     alphak = alpha*alphak;
     X0 = X;
     imshow(X);
