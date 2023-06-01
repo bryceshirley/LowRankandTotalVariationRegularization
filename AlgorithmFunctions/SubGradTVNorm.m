@@ -42,7 +42,7 @@ function subGradTVnorm = SubGradTVNorm(X)
 
     % b) Compute X(i, j) - X(i, j+1)
     XColBoundary = [X,zeros(n,1)];
-    colNeighboursDiff = diff(XColBoundary,1,2); 
+    colNeighboursDiff = - diff(XColBoundary,1,2); 
     
 
     %% Compute contributions from Mx(i,j-1) (containing X(i,j))
@@ -55,7 +55,7 @@ function subGradTVnorm = SubGradTVNorm(X)
     
     % Compute X(i, j) - X(i-1, j)
     XRowBoundaryTop = [zeros(1,m);X];
-    RowNeighboursDiffTop = - diff(XRowBoundaryTop); % Negate signs
+    RowNeighboursDiffTop = diff(XRowBoundaryTop); % Negate signs
 
     
     %% Compute The Subgradient for Each Term and Sum
