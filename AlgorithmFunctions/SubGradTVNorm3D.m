@@ -15,7 +15,7 @@ function subGradTVnorm3D = SubGradTVNorm3D(X)
 % Where, Tx(i,j,k) = |X(i, j, k) - X(i, j+1, k)| + 
 %                    |X(i+1, j, k) - X(i, j, k)| +
 %                    |X(i, j, k) - X(i, j, k+1)|
-% 
+% Tx(i,j,k-1) = |X(i, j, k-1) - X(i, j, k)|
 % Introduce sharp boundary conditions of 0 to represent the edge of the 
 % image.
 %
@@ -38,15 +38,18 @@ function subGradTVnorm3D = SubGradTVNorm3D(X)
     XF = [reshape(X,n*m,r),zeros(n*m,1)]; % zero boundary condition applied
     TxF = -reshape(diff(XF,1,2),n,m,r); % Take difference and reshape to Tensor
     
-    % X Column unfolding - Differences taken to the right.
-    % (columns of matrix are column fibres in the images)
-    XR = [reshape(X,n,m*r);zeros(1,m*r)];
-    TxR = -reshape(diff(XR,1,1),n,m,r);
+    % % X Column unfolding - Differences taken to the right.
+    % % (columns of matrix are column fibres in the images)
+    % XR = [reshape(X,n,m*r);zeros(1,m*r)]; % There needs to be 
+    % TxR = -reshape(diff(XR,1,1),n,m,r);
+    % 
+    % % X Row unfolding - Differences taken down.
+    % % (columns of matrix are row fibres in the images)
+    % XD = [reshape(reshape(X,n,m*r)',m,n*r);zeros(1,n*r)];
+    % TxD = -reshape(reshape(diff(XD,1,1),m*r,n)',n,m,r);
 
-    % X Row unfolding - Differences taken down.
-    % (columns of matrix are row fibres in the images)
-    XD = [reshape(reshape(X,n,m*r)',m,n*r);zeros(1,n*r)];
-    TxD = -reshape(reshape(diff(XD,1,1),m*r,n)',n,m,r);
+    % for loop through images
+    %  subGradTVNorm(:,:,i) = SubGradTVNorm(Image)
 
     %% Contributions from Tx(i,j,k-1)
     % X backword unfolding - Differences taken Backward
