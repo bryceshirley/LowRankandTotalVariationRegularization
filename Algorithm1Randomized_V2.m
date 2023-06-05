@@ -19,18 +19,22 @@ Xk = X0;
 
 % Choose A singular value value to be approximated as 0 when approximating
 % r (r is a rank approximation).
-zeroSingularTol=1e-14;
+% zeroSingularTol=1e-14;
 
+r=50;
 while k < kmax
 %while true
     % Compute sub-gradient
-    if k ==0
-        [~, S, ~] = svd(Xk,'econ');
-        r = length(find(diag(S)>zeroSingularTol));
-        % disp(r1)
-    else
-        [~,S,~]=TruncatedRandomizedSVD(Xk,zeroSingularTol,r);
-    end
+    % if k ==0
+    %     [~, S, ~] = svd(Xk,'econ');
+    %     r = length(find(diag(S)>zeroSingularTol));
+    %     r=100;
+    %     % disp(r1)
+    % else
+    %     [~,S,~]=TruncatedRandomizedSVD(Xk,zeroSingularTol,r);
+    % end
+
+    [~,S,~] = RandomizedSVD(Xk,r);
     p=1; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
     
@@ -42,13 +46,15 @@ while k < kmax
     
     % Define Y
     Y = Xk - (1/mu)*tk;
-    
+  
     % Compute Xk+1
-    if k==0
-        [U, S, V] = svd(Y,'econ');
-    else
-        [U,S,V] = TruncatedRandomizedSVD(Y,zeroSingularTol,r);
-    end
+    % if k==0
+    %     [U, S, V] = svd(Y,'econ');
+    % else
+    %     [U,S,V] = TruncatedRandomizedSVD(Y,zeroSingularTol,r);
+    % end
+
+    [U,S,V] = RandomizedSVD(Y,r);
     Sw = shrinkage(diag(S), w);
     ind = find(Sw>0);
    % r = length(ind);
