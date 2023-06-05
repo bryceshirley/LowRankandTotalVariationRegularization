@@ -30,41 +30,31 @@ function subGradTVnorm3D = SubGradTVNorm3D_OLD(X)
     
     % find rows and columns of X
     [n,m,r] = size(X);
-
-    %% Contributions from Tx(i,j,k)
-
+    
+    %% Find TV norm for pixels through the Images
     % X forward unfolding - Differences taken forward
-    % (Rows of matrix go through layers of images)
+    % (Each column of unfolding is an image)
     XF = [reshape(X,n*m,r),zeros(n*m,1)]; % zero boundary condition applied
     TxF = -reshape(diff(XF,1,2),n,m,r); % Take difference and reshape to Tensor
-    
-    % X Column unfolding - Differences taken to the right.
-    % (columns of matrix are column fibres in the images)
-    XR = [reshape(X,n,m*r);zeros(1,m*r)]; % There needs to be 
-    TxR = -reshape(diff(XR,1,1),n,m,r);
 
-    % X Row unfolding - Differences taken down.
-    % (columns of matrix are row fibres in the images)
-    XD = [reshape(reshape(X,n,m*r)',m,n*r);zeros(1,n*r)];
-    TxD = -reshape(reshape(diff(XD,1,1),m*r,n)',n,m,r);
-
-    %% Contributions from Tx(i,j,k-1)
+    % Contributions from Tx(i,j,k-1)
     % X backword unfolding - Differences taken Backward
     XB = [zeros(n*m,1),reshape(X,n*m,r)];
     TxB = reshape(diff(XB,1,2),n,m,r); 
 
-    %% Contributions from Tx(i,j-1,k)
-    % X Column unfolding - Differences taken to the left.
-    XL = [zeros(1,m*r); reshape(X,n,m*r)];
-    TxL = reshape(diff(XL,1,1),n,m,r);
+    pixelSubGradTVNorm = sign(TxB) + sign(TxF);
+    
+    
+    %% Find TV norm for each image
+    imageSubGradTVNorm=zeros(n,m,r);
+    for i = 1:r
+        image = X(:,:,i); 
+        imageSubGradTVNorm(:,:,i) = SubGradTVNorm(image);
+    end
 
-    %% Contributions from Tx(i,j,k-1)
-    % X Row unfolding - Differences taken Up.
-    XU = [zeros(1,n*r);reshape(reshape(X,n,m*r)',m,n*r)];
-    TxU = reshape(reshape(diff(XU,1,1),m*r,n)',n,m,r);
+
     
     %% Compute The Subgradient for Each Term and Sum For Subgradient of TV
-    subGradTVnorm3D = sign(TxL) + sign(TxR) + sign(TxD) + sign(TxU) + ...
-        + sign(TxF) +sign(TxB);
+    subGradTVnorm3D = pixelSubGradTVNorm + imageSubGradTVNorm;
 
 end
