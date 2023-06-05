@@ -23,8 +23,7 @@ X0 = XCorrupted;
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
-lambda2 = 0.02*lambda1;
-%mu = GenerateMu(X0,lambda2, P, XCorrupted);
+lambda2 = 0.2*lambda1;
 
 while alphak > tol2
     % Use Algorithm1 to compute next image iteration

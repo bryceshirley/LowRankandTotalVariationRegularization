@@ -2,24 +2,27 @@ clear all;
 close all;
 %% Generate Image/Corrupted Image
 
-% N^2 Pixels in Original Image
-N=400;
+% Generate or Import image
+N=500;% N^2 Pixels in Phantom Image
+imageMatrix = phantom(N);
+% imageMatrix = imread('AlanTuring.jpg');
+% imageMatrix= im2double(imageMatrix(:,:,1));
 
 % Portion of original image to be removed (/Corrupted)
-ratio = 0.5;
+ratio = 0.8;
 
 % Generate Image, Mask of Known Pixels Locations and Corrupted Image
-[XCorrupted,KnownPixels,XOriginal] = GenerateImage(N,ratio); % XCorrupted is M in the paper
+[XCorrupted,KnownPixels,XOriginal] = GenerateImage(imageMatrix,ratio);
 
 %% Run Algorithm 2: To Reconstruct Image
 
 alpha = 0.95;
-mu0 = 2.2; % Initial proximal term parameter
+mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1
-tol1 = 1e-6; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-5; % Tolerence for Algorithm 2 on alpha k
+tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
+tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
 XRecovered = Algorithm2(XCorrupted,KnownPixels,mu0,kmax,tol1,tol2,alpha);
