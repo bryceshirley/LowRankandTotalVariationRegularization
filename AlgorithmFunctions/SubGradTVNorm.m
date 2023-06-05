@@ -37,42 +37,28 @@ function subGradTVnorm = SubGradTVNorm(X)
     %% Compute Mx(i,j) terms in as defined above
 
     % a) Compute X(i+1, j) - X(i, j)
-    XRowBoundary = [X;zeros(1,m)]; % Choose sharp Boundary Values as zeros
-    rowNeighboursDiff = - diff(XRowBoundary); % Negate signs
+    XD = [X;zeros(1,m)]; % Choose sharp Boundary Values as zeros
+    MxD = - diff(XD,1,1); % Negate sign to remove skew
 
     % b) Compute X(i, j) - X(i, j+1)
-    XColBoundary = [X,zeros(n,1)];
-    colNeighboursDiff = - diff(XColBoundary,1,2); 
+    XR = [X,zeros(n,1)];
+    MxR = - diff(XR,1,2); % Negate signs to remove skew
     
 
     %% Compute contributions from Mx(i,j-1) (containing X(i,j))
     
     % Compute X(i, j-1) - X(i, j)
-    XColBoundaryLeft = [zeros(n,1),X]; 
-    colNeighboursDiffLeft = diff(XColBoundaryLeft,1,2);
+    XL = [zeros(n,1),X];
+    MxL = diff(XL,1,2);
 
     %% Contributions from Mx(i-1,j) (containing X(i,j))
     
     % Compute X(i, j) - X(i-1, j)
-    XRowBoundaryTop = [zeros(1,m);X];
-    RowNeighboursDiffTop = diff(XRowBoundaryTop); % Negate signs
+    XU = [zeros(1,m); X]; 
+    MxU = diff(XU,1,1);
 
     
-    %% Compute The Subgradient for Each Term and Sum
-
-    % Sub gradient of 2 terms from Mx(i,j)
-    rowNeighboursDiff = sign(rowNeighboursDiff);
-    colNeighboursDiff = sign(colNeighboursDiff);
-
-    % Sub gradient of term from Mx(i,j-1)
-    colNeighboursDiffLeft = sign(colNeighboursDiffLeft);
-
-    % Sub gradient of term from Mx(i-1,j)
-    RowNeighboursDiffTop = sign(RowNeighboursDiffTop);
-
-    
-    % Combine the matrices to subgradient TV norm matrix
-    subGradTVnorm = colNeighboursDiff + rowNeighboursDiff + ...
-    colNeighboursDiffLeft + RowNeighboursDiffTop;
+    %% Compute The Subgradient for Each Term and Sum For Subgradient of TV
+    subGradTVnorm = sign(MxL) + sign(MxR) + sign(MxD) + sign(MxU);
 
 end
