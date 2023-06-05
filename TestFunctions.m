@@ -1,5 +1,5 @@
-clear all;
-close all;
+addpath ('AlgorithmFunctions\','Algorithms\')
+
 %% Generate Image/Corrupted Image
 
 % Generate or Import image
