@@ -1,3 +1,5 @@
+clear all;
+close all;
 %% Generate Image/Corrupted Image
 
 % Generate or Import image
@@ -23,7 +25,7 @@ tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
-XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+XRecovered = Algorithm2(XCorrupted,KnownPixels,mu0,kmax,tol1,tol2,alpha);
 
 %% Calculate the Relative Frobenius Norms
 
