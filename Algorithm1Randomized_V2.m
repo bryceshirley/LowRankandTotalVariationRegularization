@@ -19,8 +19,9 @@ Xk = X0;
 
 % Choose A singular value value to be approximated as 0 when approximating
 % r (r is a rank approximation).
-zeroSingularTol=1e-14;
+% zeroSingularTol=1e-14;
 
+r=50;
 while k < kmax
 %while true
     % Compute sub-gradient
@@ -43,13 +44,15 @@ while k < kmax
     
     % Define Y
     Y = Xk - (1/mu)*tk;
-    
+  
     % Compute Xk+1
-    if k==0
-        [U, S, V] = svd(Y,'econ');
-    else
-        [U,S,V] = TruncatedRandomizedSVD(Y,zeroSingularTol,r);
-    end
+    % if k==0
+    %     [U, S, V] = svd(Y,'econ');
+    % else
+    %     [U,S,V] = TruncatedRandomizedSVD(Y,zeroSingularTol,r);
+    % end
+
+    [U,S,V] = RandomizedSVD(Y,r);
     Sw = shrinkage(diag(S), w);
     ind = find(Sw>0);
    % r = length(ind);
