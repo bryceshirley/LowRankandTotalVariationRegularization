@@ -31,6 +31,7 @@ while k < kmax
     else
         [~,S,~]=TruncatedRandomizedSVD(Xk,zeroSingularTol,r);
     end
+
     p=1; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
     
