@@ -7,18 +7,17 @@ function Xn = UnfoldTensor(X,N)
 [n,m,r] = size(X);
 
 %x = reshape(permute(X, [2 1 3]),1,[]);
-x = reshape(X,1,[]);
+%x = reshape(X,1,[]);
 if N == 1
 % Frontal Slices (cols are row fibres) mode-1
-Xn = reshape(x,n,[]);
+Xn = reshape(X,n,m*r);
 
 elseif N == 2
-% Lateral slices (cols are column fibres) mode-1
-%Xn = reshape(reshape(x,n,[])',m,[]);
-Xn = reshape(reshape(x,n,m*r)',m,r*n);
-%reshape(reshape(Xn,m*r,n)', n,m,r)
+% Lateral slices (cols are column fibres) mode-2
+Xn = reshape(reshape(X,n,m*r)',m,r*n);
+
 
 else 
 % Horizontal slices (cols are tube fibres) mode 3
-Xn = reshape(x,n*m,r)';
+Xn = reshape(X,n*m,r)';
 end
