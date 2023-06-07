@@ -18,7 +18,7 @@ k = 0;
 Xk = X0;
 
 % Set r
-r=100;
+r=50;
 
 while k < kmax
     % Compute sub-gradient

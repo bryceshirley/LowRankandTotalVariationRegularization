@@ -24,7 +24,11 @@ lambda1 = norm(XCorrupted,'fro');
 lambda2 = 0.2*lambda1;
 
 while alphak > tol2
-    [X] = Algorithm1Randomized_V3(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    if alphak > tol2*10000
+        [X] = Algorithm1Randomized_V3(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    else
+        [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    end
     alphak = alpha*alphak;
     X0 = X;
     imshow(X);
