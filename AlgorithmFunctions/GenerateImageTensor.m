@@ -16,8 +16,8 @@ XOriginal = phantom(N);
 % Initialize Tensors
 [n,m] = size(XOriginal);
 
-XCorruptedTensor = zeros(n,m,NeLayers);
-PTensor = zeros(n,m,NeLayers);
+XCorruptedTensor = zeros(NeLayers,n,m);
+PTensor = zeros(NeLayers,n,m);
 
 % Made images dim as they move through layers
 X = linspace(0,1,NeLayers);
@@ -47,5 +47,13 @@ for i = 1:NeLayers
 
     % P is a Mask that is 1 for all known positions and 0 otherwises
     PTensor(i,:,:) = P;
+
+    %     Layer = reshape(XCorrupted.*GreyMap(i), n*m,1)';
+    % XCorruptedTensor(i,:) = Layer;
+    % XCorruptedTensor(i,:,:) = XCorrupted.*GreyMap(i);
+    % 
+    % % P is a Mask that is 1 for all known positions and 0 otherwises
+    % PLayer = reshape(P,n*m,1)';
+    % PTensor(i,:) = PLayer;
 end
 end

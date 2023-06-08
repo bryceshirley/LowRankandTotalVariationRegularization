@@ -21,7 +21,7 @@ X0 = XCorrupted;
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
-lambda2 = 0.2*lambda1;
+lambda2 = 0.002*lambda1;
 
 while alphak > tol2
     [X] = Algorithm1_3D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);

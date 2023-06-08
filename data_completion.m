@@ -91,8 +91,8 @@ alpha = 0.95;
 mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
-kmax = 10; % Max Iterations for Algorithm 1
-tol1 = 1e-3; % Tolerence Covergence Parameter for Algorithm 1
+kmax = 50; % Max Iterations for Algorithm 1
+tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
@@ -122,6 +122,7 @@ disp(' ')
 figure(1)
 A_sparse = reshape(data,n_E,[]);
 imagesc(A_sparse)
+colorbar
 axis off
 title('Colour Map of Sparse Data Set (flattened)')
 xlabel('Pixels')
@@ -129,7 +130,23 @@ ylabel('Energy Levels')
 
 figure(2)
 A_out = reshape(XRecovered,n_E,[]);
-imagesc(A_out)
+
+% Remove outliers using normalization
+% for i=1:n_E
+%     Ai_out = A_out(i,:);
+%     amed = median(Ai_out);
+%     astd = std(Ai_out);
+%     amin = amed - 3*astd;
+%     amax = amed + 3*astd;
+%     Ai_out(Ai_out>amax) = amax;
+%     Ai_out(Ai_out<amin) = amin;
+%     A_out(i,:) = Ai_out;
+% end
+
+imagesc(A_out);
+caxis manual
+caxis([0 250]);
+colorbar
 title('Colour Map of Completed Data Set Hussam Algorithm(flattened)')
 xlabel('Pixels')
 ylabel('Energy Levels')
@@ -220,6 +237,9 @@ disp(' ')
 % Plot images of data sets:
 figure(3)
 imagesc(A_out)
+caxis manual
+caxis([0 250]);
+colorbar
 title('Colour Map of Completed Data Set LoopASD (flattened)')
 xlabel('Pixels')
 ylabel('Energy Levels')
@@ -248,6 +268,9 @@ if compare == 1
 
     figure
     imagesc(A_full)
+    caxis manual
+    caxis([0 250]);
+    colorbar
     axis off
 end
 
