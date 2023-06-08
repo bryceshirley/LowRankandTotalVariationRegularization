@@ -3,6 +3,8 @@ clear
 clc
 close all
 
+compare = 1;
+
 addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\','Tests\','DataFiles\')
 % First choose file from list
 d = dir('DataFiles'); % structure for Data directory folder
@@ -17,6 +19,7 @@ for i = 1:length(file_All)
     if ~strcmp('hdf5',f_name(end-3:end)) %see help
     elseif length(f_name) > 15 && strcmp('_completion',f_name(end-15:end-5))
     elseif length(f_name) > 19 && strcmp('_completion',f_name(end-19:end-9))
+    elseif length(f_name) > 15 && strcmp('_completed',f_name(end-14:end-5))
     else
         list = [list,f_name]; %#ok<AGROW> 
     end
@@ -89,7 +92,7 @@ mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1
-tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
+tol1 = 1e-3; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
@@ -132,6 +135,37 @@ xlabel('Pixels')
 ylabel('Energy Levels')
 axis off
 
+% Compare with real data
+if compare == 1
+    % % Load corresponding full data set:
+    % full_file_name = [file_name(1:12),'100'];
+    % load(full_file_name,'data')
+    % A_full = reshape(data,n_E,[]);
+
+    % Load corresponding full data set:
+    full_file_name = ['DataFiles/',file_name(5:17),'_stack_completed.hdf5'];
+    complete_data = h5read(full_file_name,'/exchange/data');
+    A_full = reshape(complete_data,n_E,[]);
+
+    % Compute scanning residual and completion error
+    res_scan = norm(Omega.*(A_full - M),'fro')/norm(Omega.*(A_full),'fro');
+    e_c = norm(A_full - A_out,'fro')/norm(A_full,'fro');
+
+    disp(['Sparse Scan Residual:   res_scan = ', num2str(res_scan)])
+    disp(' ')
+    disp(['Completion Error:            e_c = ', num2str(e_c)])
+    disp(' ')
+
+    % figure
+    % imagesc(A_full)
+    % axis off
+end
+
+beep
+disp('Completion is... Complete!')
+disp(' ')
+disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+disp(' ')
 %% LoopASD Diamonds Algorithm
 A_sparse = reshape(data,n_E,[]);
 
@@ -153,7 +187,6 @@ end
 validateattributes(r,{'numeric'},{'scalar','integer','positive','>',2,'<',15},file_name,'r',2)
 
 % Fixed Variables
-compare = 0;
 tol = 1e-4;
 kmax = 2000;
 
@@ -192,29 +225,36 @@ xlabel('Pixels')
 ylabel('Energy Levels')
 axis off
 
+% Compare with real data
+if compare == 1
+    % % Load corresponding full data set:
+    % full_file_name = [file_name(1:12),'100'];
+    % load(full_file_name,'data')
+    % A_full = reshape(data,n_E,[]);
 
-%% Work out what this Section does
+    % Load corresponding full data set:
+    full_file_name = ['DataFiles/',file_name(5:17),'_stack_completed.hdf5'];
+    data = h5read(full_file_name,'/exchange/data');
+    A_full = reshape(data,n_E,[]);
 
-% if compare == 1
-%     % Load corresponding full data set:
-%     full_file_name = [file_name(1:12),'100'];
-%     load(full_file_name,'data')
-%     A_full = reshape(data,n_E,[]);
-% 
-%     % Compute scanning residual and completion error
-%     res_scan = norm(Omega.*(A_full - M),'fro')/norm(Omega.*(A_full),'fro');
-%     e_c = norm(A_full - A_out,'fro')/norm(A_full,'fro');
-% 
-%     disp(['Sparse Scan Residual:   res_scan = ', num2str(res_scan)])
-%     disp(' ')
-%     disp(['Completion Error:            e_c = ', num2str(e_c)])
-%     disp(' ')
-% 
-%     figure
-%     imagesc(A_full)
-%     axis off
-% end
-% 
+    % Compute scanning residual and completion error
+    res_scan = norm(Omega.*(A_full - M),'fro')/norm(Omega.*(A_full),'fro');
+    e_c = norm(A_full - A_out,'fro')/norm(A_full,'fro');
+
+    disp(['Sparse Scan Residual:   res_scan = ', num2str(res_scan)])
+    disp(' ')
+    disp(['Completion Error:            e_c = ', num2str(e_c)])
+    disp(' ')
+
+    figure
+    imagesc(A_full)
+    axis off
+end
+
+beep
+disp('Completion is... Complete!')
+%% Don't Save completed version
+
 % % Copy original file to store completed data set
 % data_complete = reshape(A_out,[n_E,n1,n2]);
 % file_name_complete = [file_name(1:end-5),'_completion.hdf5'];
@@ -229,7 +269,7 @@ axis off
 %         file_exists = 0;
 %     end
 % end
-% 
+
 % status = copyfile(file_name,file_name_complete);
 % 
 % if status == 0
@@ -238,6 +278,3 @@ axis off
 % 
 % % Replace data with completion in hdf file.
 % h5write(file_name_complete,'/exchange/data',data_complete)
-% 
-% beep
-%disp('Completion is... Complete!')

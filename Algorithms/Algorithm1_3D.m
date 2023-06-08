@@ -23,7 +23,8 @@ Xk = X0;
 
 % Unfolding mode
 n=1;
-%r=n_E;
+
+% plot=false;
 while k < kmax
 
     % We are assuming low rank variation between the Xk3 unfolding
@@ -31,13 +32,8 @@ while k < kmax
 
     % Compute sub-gradient
     [~, S, ~] = svd(Xk_n,'econ');
-
-    % if r == n_E
-    %     [~, S, ~] = svd(Xk_n,'econ');
-    % else
-    %     [~, S, ~] = RandomizedSVD(Xk_n,r);
-    % end
-    % testRank(S);
+    %testRank(S,plot);
+    
     p=1; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
 
@@ -54,25 +50,17 @@ while k < kmax
     % Compute Xk+1
     % Unfold so that each row is an image
     Y_n = UnfoldTensor(Y,n); % Low-rank variation through Y image layers
-    % % Transposed so that each column is an image
-    % Y1 = Y1';
-    
+
     [U, S, V] = svd(Y_n,'econ');
+    % testRank(S,plot);
 
-    % if r == n_E
-    %     [U, S, V] = svd(Y_n,'econ');
-    % else
-    %     [U, S, V] = RandomizedSVD(Y_n,r);
-    % end
-    % testRank(S);
     Sw = shrinkage(diag(S), w);
+    ind = find(Sw>0);
 
-    % testRank(Sw);
+    % testRank(Sw,plot);
     % disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     % disp(' ')
-
-    ind = find(Sw>0);
-   % r=length(ind);
+   
     X_new = U(:,ind) * diag(Sw(ind)) * V(:,ind)';
 
     % Reshape back to tensor

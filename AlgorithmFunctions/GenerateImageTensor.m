@@ -43,9 +43,9 @@ P = reshape(PVector,N,N);
 
 % Try do this with repmat instead
 for i = 1:NeLayers
-    XCorruptedTensor(:,:,i) = XCorrupted.*GreyMap(i);
+    XCorruptedTensor(i,:,:) = XCorrupted.*GreyMap(i);
 
     % P is a Mask that is 1 for all known positions and 0 otherwises
-    PTensor(:,:,i) = P;
+    PTensor(i,:,:) = P;
 end
 end

@@ -21,22 +21,12 @@ X0 = XCorrupted;
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
-lambda2 = 0.02*lambda1;
+lambda2 = 0.2*lambda1;
 
 while alphak > tol2
     [X] = Algorithm1_3D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
     alphak = alpha*alphak;
     X0 = X;
-
-
-    % figure(1)
-    % subplot(1,2,1)
-    % imshow(X(:,:,1));
-    % xlabel('First Image Layer')
-    % subplot(1,2,2)
-    % imshow(X(:,:,end));
-    % xlabel('Final Image Layer')
-    % sgtitle('Evolution of Tensor Over Each Algorithm 2 Iteration')
 end
 
 % Recovered Image as Function Output
