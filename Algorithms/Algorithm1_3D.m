@@ -24,17 +24,17 @@ Xk = X0;
 % Unfolding mode
 n=1;
 
-% plot=false;
+plot=false;
 while k < kmax
 
     % We are assuming low rank variation between the Xk3 unfolding
     Xk_n = UnfoldTensor(Xk,n); % mode-3 tube unfolding (each tube is a pixel)
 
-    % Compute sub-gradient
+    % Compute Lp-norm of Singular Values
     [~, S, ~] = svd(Xk_n,'econ');
-    %testRank(S,plot);
+    % testRank(S,plot);
     
-    p=1; % Lp norm (has to be <=1)
+    p=.9; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
 
     
@@ -45,7 +45,7 @@ while k < kmax
     tk = Computetk(Xk,subGradTVnorm3D,P,M,lambda2); % Tensor
     
     % Define Y
-    Y = Xk - (1/mu)*tk; % Tensor
+    Y = Xk - (1/mu).*tk; % Tensor
     
     % Compute Xk+1
     % Unfold so that each row is an image

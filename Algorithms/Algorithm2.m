@@ -1,10 +1,10 @@
-function XRecovered = Algorithm2_3D(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
+function XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Algorithm 2 in the paper "Low-Rank and Total Variation 
 % Regularization and Its Application to Image Recovery". The function
 % recovers the original image from corrupted data.
 % Inputs:
-% - XCorrupted: Images once data has been removed (ratio portion removed)
-% - P: Tensor with 1s at known pixel positions and 0 otherwise.
+% - XCorrupted: Image once data has been removed (ratio portion removed).
+% - P: Matrix with 1s at known pixel positions and 0 otherwise.
 % - mu:Proximal term parameter
 % - kmax: Max Iterations for Algorithm 1
 % - tol1: Tolerence Covergence Parameter for Algorithm 1
@@ -15,29 +15,28 @@ function XRecovered = Algorithm2_3D(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Ouput:
 % - XRecovered: the recovered image.
 
-% Set Initial Guess
-X0 = XCorrupted;
+% XCorrupted is M in the paper.
+
+% Set Initial Guess 
+X0 = XCorrupted; 
 
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
-lambda2 = 0.0015*lambda1;
-
-% [n_E,n1,n2] = size(X0);
+lambda2 = 0.2*lambda1;
 
 while alphak > tol2
-    [X] = Algorithm1_3D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    % Use Algorithm1 to compute next image iteration
+    [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+
+    % Update parameters
     alphak = alpha*alphak;
+    
+    % Update X0
     X0 = X;
 
-    % A = reshape(X,n_E,n1*n2);
-    % 
-    % imagesc(A)
-    % colorbar
-    % axis off
-    % xlabel('Pixels')
-    % ylabel('Energy Levels')
-    % pause(0.1)
+    % Display Image Iteration
+    imshow(X);
 end
 
 % Recovered Image as Function Output

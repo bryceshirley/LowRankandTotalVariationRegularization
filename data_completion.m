@@ -78,7 +78,9 @@ end
 
 % Format data set:
 [n_E,n1,n2] = size(data);
-A_sparse = reshape(data,n_E,[]);
+A_sparse = reshape(data,n_E,n1*n2);
+Amax = max(max(A_sparse));
+Amin = min(min(A_sparse));
 % Comstruct Omega, M and compute true undersample ratio:
 Omega = A_sparse ~= -1;
 
@@ -93,7 +95,7 @@ mu = 2; % Proximal term parameter
 % Loop Stopping Parameters 
 kmax = 50; % Max Iterations for Algorithm 1
 tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
+tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
 XCorrupted = reshape(M,n_E,n1,n2);
@@ -120,7 +122,6 @@ disp(' ')
 
 % Plot images of data sets:
 figure(1)
-A_sparse = reshape(data,n_E,[]);
 imagesc(A_sparse)
 colorbar
 axis off
@@ -129,23 +130,10 @@ xlabel('Pixels')
 ylabel('Energy Levels')
 
 figure(2)
-A_out = reshape(XRecovered,n_E,[]);
-
-% Remove outliers using normalization
-% for i=1:n_E
-%     Ai_out = A_out(i,:);
-%     amed = median(Ai_out);
-%     astd = std(Ai_out);
-%     amin = amed - 3*astd;
-%     amax = amed + 3*astd;
-%     Ai_out(Ai_out>amax) = amax;
-%     Ai_out(Ai_out<amin) = amin;
-%     A_out(i,:) = Ai_out;
-% end
-
+A_out = reshape(XRecovered,n_E,n1*n2);
 imagesc(A_out);
 caxis manual
-caxis([0 250]);
+caxis([Amin Amax]);
 colorbar
 title('Colour Map of Completed Data Set Hussam Algorithm(flattened)')
 xlabel('Pixels')
@@ -224,7 +212,7 @@ res_out = norm(Omega.*(A_out - A_sparse),'fro')/norm(Omega.*A_sparse,'fro');
 
 
 
-disp('Numerical Results for LoopASD')
+disp(['Numerical Results for LoopASD with Completion Rank = ',num2str(r)])
 % Display numerical results
 disp(' ')
 disp(['Completion Run Time:           T = ', num2str(T),'s'])
@@ -238,9 +226,9 @@ disp(' ')
 figure(3)
 imagesc(A_out)
 caxis manual
-caxis([0 250]);
+caxis([Amin Amax]);
 colorbar
-title('Colour Map of Completed Data Set LoopASD (flattened)')
+title({'Colour Map of Completed Data Set LoopASD (flattened)',['with Completion Rank = ',num2str(r)]})
 xlabel('Pixels')
 ylabel('Energy Levels')
 axis off
@@ -268,8 +256,9 @@ if compare == 1
 
     figure
     imagesc(A_full)
+    title('Colour Map of Complete Data Set (flattened)')
     caxis manual
-    caxis([0 250]);
+    caxis([Amin Amax]);
     colorbar
     axis off
 end
