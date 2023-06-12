@@ -26,7 +26,7 @@ lambda2 = 0.0015*lambda1;
 % [n_E,n1,n2] = size(X0);
 
 while alphak > tol2
-    [X] = Algorithm1_3D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    [X] = Algorithm1_3D_V2(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
     alphak = alpha*alphak;
     X0 = X;
 
