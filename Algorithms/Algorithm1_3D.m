@@ -24,15 +24,13 @@ Xk = X0;
 % Unfolding mode
 n=1;
 
-plot=false;
 while k < kmax
 
     % We are assuming low rank variation between the Xk3 unfolding
-    Xk_n = UnfoldTensor(Xk,n); % mode-3 tube unfolding (each tube is a pixel)
+    Xk_n = UnfoldTensor(Xk,n); % mode-n unfolding
 
     % Compute Lp-norm of Singular Values
     [~, S, ~] = svd(Xk_n,'econ');
-    % testRank(S,plot);
     
     p=.9; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
@@ -50,17 +48,9 @@ while k < kmax
     % Compute Xk+1
     % Unfold so that each row is an image
     Y_n = UnfoldTensor(Y,n); % Low-rank variation through Y image layers
-
     [U, S, V] = svd(Y_n,'econ');
-    % testRank(S,plot);
-
     Sw = shrinkage(diag(S), w);
     ind = find(Sw>0);
-
-    % testRank(Sw,plot);
-    % disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    % disp(' ')
-   
     X_new = U(:,ind) * diag(Sw(ind)) * V(:,ind)';
 
     % Reshape back to tensor

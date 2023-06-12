@@ -14,7 +14,6 @@ function [X] = ReconstructRows(M, P, mu,kmax,tol1,tol2,alpha)
 % Ouput:
 % - X: the recovered image.
 
-
 % Initialize variables
 [n_E,n1,n2] = size(M);
 Xn = zeros(n_E,n1*n2); 
@@ -30,7 +29,7 @@ for i = 1:n_E
     mk = reshape(Mn(i,:),n1,n2);
     
     % Preform reconstruction on image
-    xk = Algorithm2(mk,pk,mu,kmax,tol1,tol2,alpha);
+    xk = Algorithm2_2D(mk,pk,mu,kmax,tol1,tol2,alpha);
 
     % Store in updated image
     Xn(i,:) = reshape(xk,1,n1*n2);

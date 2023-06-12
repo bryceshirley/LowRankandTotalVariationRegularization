@@ -1,4 +1,4 @@
-function XRecovered = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
+function XRecovered = Algorithm2_2D(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Algorithm 2 in the paper "Low-Rank and Total Variation 
 % Regularization and Its Application to Image Recovery". The function
 % recovers the original image from corrupted data.
@@ -23,20 +23,17 @@ X0 = XCorrupted;
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
-lambda2 = 0.2*lambda1;
+lambda2 = 0.5*lambda1;
 
 while alphak > tol2
     % Use Algorithm1 to compute next image iteration
-    [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    [X] = Algorithm1_2D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
 
     % Update parameters
     alphak = alpha*alphak;
     
     % Update X0
     X0 = X;
-
-    % Display Image Iteration
-    imshow(X);
 end
 
 % Recovered Image as Function Output

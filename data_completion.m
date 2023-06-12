@@ -93,15 +93,22 @@ alpha = 0.95;
 mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
-kmax = 50; % Max Iterations for Algorithm 1
+kmax = 10; % Max Iterations for Algorithm 1
 tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
+tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
 XCorrupted = reshape(M,n_E,n1,n2);
 KnownPixels = reshape(Omega,n_E,n1,n2);
 tic
-XRecovered = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+X0 = ReconstructRows(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+toc
+X0_out = reshape(X0,n_E,n1*n2);
+figure
+imagesc(X0_out)
+input('Enter to continue.')
+tic
+XRecovered = Algorithm2_3D(X0,XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
 T=toc;
 
 
@@ -121,7 +128,7 @@ disp(['Completion Residual:     res_out = ', num2str(res_out)])
 disp(' ')
 
 % Plot images of data sets:
-figure(1)
+figure
 imagesc(A_sparse)
 colorbar
 axis off
@@ -129,7 +136,7 @@ title('Colour Map of Sparse Data Set (flattened)')
 xlabel('Pixels')
 ylabel('Energy Levels')
 
-figure(2)
+figure
 A_out = reshape(XRecovered,n_E,n1*n2);
 imagesc(A_out);
 caxis manual
@@ -223,7 +230,7 @@ disp(['Completion Residual:     res_out = ', num2str(res_out)])
 disp(' ')
 
 % Plot images of data sets:
-figure(3)
+figure
 imagesc(A_out)
 caxis manual
 caxis([Amin Amax]);

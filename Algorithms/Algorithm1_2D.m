@@ -1,4 +1,4 @@
-function [Xk] = Algorithm1(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
+function [Xk] = Algorithm1_2D(X0, M, P, lambda1,lambda2, mu,kmax,Tol)
 % Solves image completion using low-rank and total variation regularization
 % Input:
 % - X0: Initial guess
@@ -24,7 +24,7 @@ while k < kmax
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
     
     % Compute the subgradient of the TV norm of Xk
-    subGradTVnorm = SubGradTVNorm(Xk);
+    subGradTVnorm = SubGradTVNorm2D(Xk);
     
     % Compute tk
     tk = Computetk(Xk,subGradTVnorm,P,M,lambda2);
