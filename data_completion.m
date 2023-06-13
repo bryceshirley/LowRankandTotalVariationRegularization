@@ -93,8 +93,8 @@ alpha = 0.95;
 mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
-kmax = 50; % Max Iterations for Algorithm 1
-tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
+kmax = 20; % Max Iterations for Algorithm 1
+tol1 = 1e-4; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
@@ -192,7 +192,7 @@ end
 validateattributes(r,{'numeric'},{'scalar','integer','positive','>',2,'<',15},file_name,'r',2)
 
 % Fixed Variables
-tol = 1e-4;
+tol = 1e-8;
 kmax = 2000;
 
 % Comstruct Omega, M and compute true undersample ratio:

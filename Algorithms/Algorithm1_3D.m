@@ -24,7 +24,7 @@ Xk = X0;
 % Unfolding mode
 n=1;
 
-plot=false;
+%plot=false;
 while k < kmax
 
     % We are assuming low rank variation between the Xk3 unfolding
@@ -34,12 +34,12 @@ while k < kmax
     [~, S, ~] = svd(Xk_n,'econ');
     % testRank(S,plot);
     
-    p=.9; % Lp norm (has to be <=1)
+    p=1; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
 
     
     % Compute the subgradient of the TV norm of Xk
-    subGradTVnorm3D = SubGradTVNorm3D(Xk); %Tensor
+    subGradTVnorm3D = SubGradTVNorm3D_V2(Xk); %Tensor
     
     % Compute tk
     tk = Computetk(Xk,subGradTVnorm3D,P,M,lambda2); % Tensor
