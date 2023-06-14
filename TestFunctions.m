@@ -1,18 +1,7 @@
 addpath ('AlgorithmFunctions\','Algorithms\')
 
 %% Generate Image/Corrupted Image
-
-% Generate or Import image
-N=500;% N^2 Pixels in Phantom Image
-imageMatrix = phantom(N);
-% imageMatrix = imread('AlanTuring.jpg');
-% imageMatrix= im2double(imageMatrix(:,:,1));
-
-% Portion of original image to be removed (/Corrupted)
-ratio = 0.8;
-
-% Generate Image, Mask of Known Pixels Locations and Corrupted Image
-[XCorrupted,KnownPixels,XOriginal] = GenerateImage(imageMatrix,ratio);
+[XCorrupted,KnownPixels,XOriginal] = GenerateImage();
 
 %% Run Algorithm 2: To Reconstruct Image
 
@@ -25,8 +14,9 @@ tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 % Recover Original Image from Corrupted Image
+tic;
 XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
-
+T=toc;
 %% Calculate the Relative Frobenius Norms
 
 % Display Relative Frobenius Norms
@@ -35,6 +25,8 @@ disp(norm(XOriginal-XRecovered,'fro')/norm(XOriginal,'fro'))
 disp(' ')
 disp('Relative Frobenius Norm between Recovered Image and Corrupted Image')
 disp(norm(KnownPixels.*(XCorrupted-XRecovered),'fro')/norm(XCorrupted,'fro'))
+disp(' ')
+disp(['The runtime was: ', num2str(T),'s'])
 
 %% Plot results
 figure()
