@@ -34,7 +34,7 @@ while k < kmax
     [~, S, ~] = svd(Xk_n,'econ');
     % testRank(S,plot);
     
-    p=.9; % Lp norm (has to be <=1)
+    p=.8; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
 
     
