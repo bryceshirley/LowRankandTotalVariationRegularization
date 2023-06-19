@@ -1,34 +1,39 @@
-addpath ('AlgorithmFunctions\','Algorithms\')
+clear all;
+clc
+close all;
+%% Add Folders to path
+
+addpath ('AlgorithmFunctions\','Algorithms\','DataFunctions\','DataFiles\')
 
 %% Generate Image/Corrupted Image
+
 [XCorrupted,KnownPixels,XOriginal] = GenerateImage();
+
+%% Initialize Parameters
+
+% Algorithm parameters
+alpha = 0.95; % Regularization Dampening parameter
+mu = 2; % Proximal term parameter
+
+% Stopping Parameters 
+kmax = 10; % Max Iterations for Algorithm 1
+tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
+tol2 = 1e-1; % Tolerence for Algorithm 2 on alpha k
 
 %% Run Algorithm 2: To Reconstruct Image
 
-alpha = 0.95;
-mu = 2; % Proximal term parameter
-
-% Loop Stopping Parameters 
-kmax = 10; % Max Iterations for Algorithm 1
-tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
-
-% Recover Original Image from Corrupted Image
 tic;
-XRecovered = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+[XRecovered,XStore] = Algorithm2(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
 T=toc;
-%% Calculate the Relative Frobenius Norms
 
-% Display Relative Frobenius Norms
-disp('Relative Frobenius Norm between Recovered Image and Original Image')
-disp(norm(XOriginal-XRecovered,'fro')/norm(XOriginal,'fro'))
-disp(' ')
-disp('Relative Frobenius Norm between Recovered Image and Corrupted Image')
-disp(norm(KnownPixels.*(XCorrupted-XRecovered),'fro')/norm(XCorrupted,'fro'))
-disp(' ')
 disp(['The runtime was: ', num2str(T),'s'])
 
-%% Plot results
+%% Output Error Related Results
+
+ErrorResults(XStore,XOriginal,XCorrupted,KnownPixels)
+
+%% Plot Final Reconstructions
+
 figure()
 subplot(1,3,1)
 imshow(XOriginal);
