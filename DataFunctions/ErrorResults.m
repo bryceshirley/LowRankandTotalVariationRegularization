@@ -1,10 +1,11 @@
-function ErrorResults(XStore,XOriginal,XCorrupted,KnownPixels,T)
+function ErrorResults(XStore,XOriginal,XCorrupted,KnownPixels)
 
 [totalAlg2Iterations,n1,n2] = size(XStore);
 
 % Commpute norms for various iterations
-totalRelativeError(1)=norm(XOriginal-XStore(2,:,:),'fro')./norm(XOriginal,'fro');
-relativeError(1)=norm(KnownPixels.*(XCorrupted-XStore(2,:,:)),'fro')./norm(XCorrupted,'fro');
+X = reshape(XStore(2,:,:),n1,n2);
+totalRelativeError(1)=norm(XOriginal-X,'fro')/norm(XOriginal,'fro');
+relativeError(1)=norm(KnownPixels.*(XCorrupted-X),'fro')/norm(XCorrupted,'fro');
 idx=2;
 for i=10:10:totalAlg2Iterations
     X = reshape(XStore(i,:,:),n1,n2);
