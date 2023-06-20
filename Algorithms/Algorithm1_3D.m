@@ -23,8 +23,6 @@ Xk = X0;
 
 % Unfolding mode
 n=1;
-
-plot=false;
 while k < kmax
 
     % We are assuming low rank variation between the Xk3 unfolding
@@ -32,9 +30,9 @@ while k < kmax
 
     % Compute Lp-norm of Singular Values
     [~, S, ~] = svd(Xk_n,'econ');
-    % testRank(S,plot);
+    %testRank(S);
     
-    p=.8; % Lp norm (has to be <=1)
+    p=.9; % Lp norm (has to be <=1)
     w = Derivative_Weighted_Lpnorm_SF(diag(S),lambda1,p)./mu;
 
     
@@ -52,14 +50,10 @@ while k < kmax
     Y_n = UnfoldTensor(Y,n); % Low-rank variation through Y image layers
 
     [U, S, V] = svd(Y_n,'econ');
-    % testRank(S,plot);
+
 
     Sw = shrinkage(diag(S), w);
     ind = find(Sw>0);
-
-    % testRank(Sw,plot);
-    % disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    % disp(' ')
    
     X_new = U(:,ind) * diag(Sw(ind)) * V(:,ind)';
 
