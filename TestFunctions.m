@@ -18,7 +18,7 @@ mu = 2; % Proximal term parameter
 % Stopping Parameters 
 kmax = 10; % Max Iterations for Algorithm 1
 tol1 = 1e-16; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-1; % Tolerence for Algorithm 2 on alpha k
+tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 %% Run Algorithm 2: To Reconstruct Image
 
