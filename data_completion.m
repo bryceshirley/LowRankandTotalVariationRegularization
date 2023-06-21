@@ -41,7 +41,8 @@ KnownPixels = reshape(Omega,n_E,n1,n2);
 tic
 XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha,kmax2);
 T=toc;
-X_out = reshape(XStore(end,:,:),n_E,n1*n2);
+
+Alg2_out = reshape(XStore(end,:,:),n_E,n1*n2);
 %% Numerical Results
 
 disp('Numerical Results for Hussams Algorithm')
@@ -61,7 +62,7 @@ xlabel('Pixels')
 ylabel('Energy Levels')
 
 figure()
-imagesc(X_out);
+imagesc(Alg2_out);
 caxis manual
 caxis([Amin Amax]);
 colorbar
@@ -84,13 +85,13 @@ r = SelectRank(file_name);
 % Complete Data:
 tic
 [X_out,Y_out,k_fin,res] = LoopedASD_ES(M,Omega,r,tol,kmax);
-A_out = X_out*Y_out;
+LOOPASD_out = X_out*Y_out;
 T = toc;
 
 %% Results
 
 %Compute residual of completion:
-res_out = norm(Omega.*(A_out - A_sparse),'fro')/norm(Omega.*A_sparse,'fro');
+res_out = norm(Omega.*(LOOPASD_out - A_sparse),'fro')/norm(Omega.*A_sparse,'fro');
 
 
 
@@ -106,7 +107,7 @@ disp(' ')
 
 % Plot images of data sets:
 figure
-imagesc(A_out)
+imagesc(LOOPASD_out)
 caxis manual
 caxis([Amin Amax]);
 colorbar
@@ -118,7 +119,7 @@ axis off
 % Compare with real data
 % Compute scanning residual and completion error
 res_scan = norm(Omega.*(A_full - M),'fro')/norm(Omega.*(A_full),'fro');
-e_c = norm(A_full - A_out,'fro')/norm(A_full,'fro');
+e_c = norm(A_full - LOOPASD_out,'fro')/norm(A_full,'fro');
 
 disp(['Total Completion Error:            e_c = ', num2str(e_c)])
 disp(' ')
@@ -136,3 +137,42 @@ axis off
 
 beep
 disp('Completion is... Complete!')
+
+%% Unfold in X each layer
+X_layers=reshape(reshape(Alg2_out,n_E,n1*n2)',n2,n_E*n2);
+Full_layers=reshape(reshape(A_full,n_E,n1*n2)',n2,n_E*n2);
+LOOPASD_layers=reshape(reshape(LOOPASD_out,n_E,n1*n2)',n2,n_E*n2);
+
+figure()
+subplot(1,2,1)
+imagesc(X_layers(:,n2*80+1:n2*85))
+caxis manual
+caxis([Amin Amax]);
+colorbar
+axis off
+title('Hussam''s Algorithm')
+subplot(1,2,2)
+imagesc(Full_layers(:,n2*80+1:n2*85))
+title('Full Data')
+caxis manual
+caxis([Amin Amax]);
+colorbar
+axis off
+set(gcf,'position',[20,150,600,200])
+
+figure()
+subplot(1,2,1)
+imagesc(LOOPASD_layers(:,n2*80+1:n2*85))
+title('LOOPASD')
+caxis manual
+caxis([Amin Amax]);
+colorbar
+axis off
+subplot(1,2,2)
+imagesc(Full_layers(:,n2*80+1:n2*85))
+title('Full Data')
+caxis manual
+caxis([Amin Amax]);
+colorbar
+axis off
+set(gcf,'position',[650,150,600,200])
