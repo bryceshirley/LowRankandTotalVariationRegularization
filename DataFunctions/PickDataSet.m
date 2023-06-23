@@ -1,7 +1,7 @@
-function [data,file_name] = PickDataSet()
+function [data,file_name] = PickDataSet(folder)
 
 % First choose file from list
-d = dir('DataFiles'); % structure for Data directory folder
+d = dir(folder); % structure for Data directory folder
 file_All = {d.name}; % lists file names including '.' and '..'
 file_All = file_All(3:end); % Ignore '.' and '..'
 
