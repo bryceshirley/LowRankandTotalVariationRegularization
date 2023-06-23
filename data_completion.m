@@ -8,7 +8,7 @@ addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\','Tests\
 
 %% Prepare Data
 % Pick DataSet
-[data,file_name] = PickDataSet();
+[data,file_name] = PickDataSet('DataFiles');
 
 % Format data set:`
 [n_E,n1,n2] = size(data);
