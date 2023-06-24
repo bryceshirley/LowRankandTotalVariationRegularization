@@ -88,6 +88,9 @@ else
 end
 
 
-[XCorrupted,P,XOriginal] = CorruptImage(imageMatrix,ratio);
+%[XCorrupted,P,XOriginal] = CorruptImage(imageMatrix,ratio);
 
+[P,XCorrupted,ratio]=SpiralSampler(imageMatrix,10,1e-2);
+XOriginal = imageMatrix; 
+disp(ratio)
 end
