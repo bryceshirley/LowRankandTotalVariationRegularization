@@ -7,19 +7,21 @@ addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\','Tests\
 
 
 %% Prepare Data
+
 % Pick DataSet
-[data,file_name] = PickDataSet('DataFiles');
+[~,file_name] = PickDataSet('DataFiles');
 
-% Format data set:`
-[n_E,n1,n2] = size(data);
-A_sparse = reshape(data,n_E,n1*n2);
-Amax = max(max(A_sparse));
-Amin = min(min(A_sparse));
+% Sample dataset
+[M,Omega] = RandomSampleFull(file_name);
 
-% Comstruct Omega, M and true undersampling ratio
-Omega = A_sparse ~= -1;
+% Flatten Sampled DataSet
+[n_E,n1,n2] = size(M);
+A_sparse = reshape(M,n_E,n1*n2);
+
+
+% Find true undersampling ratio
 p_true = sum(sum(Omega))/numel(Omega);
-M = A_sparse.*Omega;
+
 
 %% Hussam's Algorithm
 
@@ -29,20 +31,22 @@ mu = 2; % Proximal term parameter
 
 % Loop Stopping Parameters 
 kmax = 50; % Max Iterations for Algorithm 1
-kmax2 = 30; % Max Iterations for Algorithm 2
+% kmax2 = 30; % Max Iterations for Algorithm 2
 tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
 tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
 
-% Recover Original Image from Corrupted Image
+% Unflatten samples
 XCorrupted = reshape(M,n_E,n1,n2);
 KnownPixels = reshape(Omega,n_E,n1,n2);
 
 % Complete Data:
 tic
-XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha,kmax2);
+XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
 T=toc;
 
 Alg2_out = reshape(XStore(end,:,:),n_E,n1*n2);
+Amax = max(max(Alg2_out));
+Amin = min(min(Alg2_out));
 %% Numerical Results
 
 disp('Numerical Results for Hussams Algorithm')
@@ -138,41 +142,41 @@ axis off
 beep
 disp('Completion is... Complete!')
 
-%% Unfold in X each layer
-X_layers=reshape(reshape(Alg2_out,n_E,n1*n2)',n2,n_E*n2);
-Full_layers=reshape(reshape(A_full,n_E,n1*n2)',n2,n_E*n2);
-LOOPASD_layers=reshape(reshape(LOOPASD_out,n_E,n1*n2)',n2,n_E*n2);
-
-figure()
-subplot(1,2,1)
-imagesc(X_layers(:,n2*80+1:n2*85))
-caxis manual
-caxis([Amin Amax]);
-colorbar
-axis off
-title('Hussam''s Algorithm')
-subplot(1,2,2)
-imagesc(Full_layers(:,n2*80+1:n2*85))
-title('Full Data')
-caxis manual
-caxis([Amin Amax]);
-colorbar
-axis off
-set(gcf,'position',[20,150,600,200])
-
-figure()
-subplot(1,2,1)
-imagesc(LOOPASD_layers(:,n2*80+1:n2*85))
-title('LOOPASD')
-caxis manual
-caxis([Amin Amax]);
-colorbar
-axis off
-subplot(1,2,2)
-imagesc(Full_layers(:,n2*80+1:n2*85))
-title('Full Data')
-caxis manual
-caxis([Amin Amax]);
-colorbar
-axis off
-set(gcf,'position',[650,150,600,200])
+% %% Unfold in X each layer
+% X_layers=reshape(reshape(Alg2_out,n_E,n1*n2)',n2,n_E*n2);
+% Full_layers=reshape(reshape(A_full,n_E,n1*n2)',n2,n_E*n2);
+% LOOPASD_layers=reshape(reshape(LOOPASD_out,n_E,n1*n2)',n2,n_E*n2);
+% 
+% figure()
+% subplot(1,2,1)
+% imagesc(X_layers(:,n2*80+1:n2*85))
+% caxis manual
+% caxis([Amin Amax]);
+% colorbar
+% axis off
+% title('Hussam''s Algorithm')
+% subplot(1,2,2)
+% imagesc(Full_layers(:,n2*80+1:n2*85))
+% title('Full Data')
+% caxis manual
+% caxis([Amin Amax]);
+% colorbar
+% axis off
+% set(gcf,'position',[20,150,600,200])
+% 
+% figure()
+% subplot(1,2,1)
+% imagesc(LOOPASD_layers(:,n2*80+1:n2*85))
+% title('LOOPASD')
+% caxis manual
+% caxis([Amin Amax]);
+% colorbar
+% axis off
+% subplot(1,2,2)
+% imagesc(Full_layers(:,n2*80+1:n2*85))
+% title('Full Data')
+% caxis manual
+% caxis([Amin Amax]);
+% colorbar
+% axis off
+% set(gcf,'position',[650,150,600,200])

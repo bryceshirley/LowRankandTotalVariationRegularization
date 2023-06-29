@@ -2,8 +2,8 @@ function X_full = ErrorResults(XStore,M,Omega,file_name)
 % Dimension: N=n1*n2
 [totalIts,n_E,N] = size(XStore);
 
-% Completed Result
-X_out = reshape(XStore(end,:,:),n_E,N);
+% % Completed Result
+% X_out = reshape(XStore(end,:,:),n_E,N);
 
 % Load corresponding full data set:
 full_file_name = ['DataFiles/',file_name(5:17),'_stack_completed.hdf5'];
