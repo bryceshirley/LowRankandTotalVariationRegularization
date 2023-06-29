@@ -1,4 +1,4 @@
-function XStore = Algorithm2_3D(XCorrupted,P,mu,kmax,tol1,tol2,alpha,kmax2)
+function XStore = Algorithm2_3D(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % Algorithm 2 in the paper "Low-Rank and Total Variation 
 % Regularization and Its Application to Image Recovery". The function
 % recovers the original image from corrupted data.
@@ -30,8 +30,8 @@ lambda2 = 0.0015*lambda1;
 XStore(1,:,:) = reshape(X0,n_E,n1*n2);
 i=2;
 
-% Stopping count
-k = 1;
+% % Stopping count
+% k = 1;
 while alphak > tol2
     % Use Algorithm1 to compute next image iteration
     [X] = Algorithm1_3D(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
@@ -46,10 +46,10 @@ while alphak > tol2
     XStore(i,:,:) = reshape(X0,n_E,n1*n2);
     i = i+1;
 
-    if k > kmax2
-        break
-    end
-    k=k+1;
+    % if k > kmax2
+    %     break
+    % end
+    % k=k+1;
 end
 
 % % Recovered Image as Function Output
