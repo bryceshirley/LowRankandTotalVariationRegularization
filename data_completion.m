@@ -35,12 +35,15 @@ incomplete_data = reshape(complete_data,n_E,[]);
 sumratio = 0;
 for i=1:n_E
     data_matrix=incomplete_data(i,:);
-    
-    [sample_matrix,sample_image,ratio]=SpiralSampler(matrix,randi([5,20]),0.05);
+
+    [sample_matrix,sample_image,ratio]=SpiralSampler2(matrix,randi([5,100]),1000,0.1);
     sumratio = sumratio + ratio;
+    %imagesc(reshape(sample_matrix,n1,n2))
+    %disp(ratio)
     sample_matrix = reshape(sample_matrix,1,[]);
     data_matrix=data_matrix.*sample_matrix;
-    incomplete_data(i,:,:)=data_matrix;
+    incomplete_data(i,:)=data_matrix;
+
 end
 disp(sumratio/n_E)
 
@@ -77,10 +80,12 @@ KnownPixels = reshape(Omega,n_E,n1,n2);
 
 % Complete Data:
 tic
-XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha,kmax2);
+%XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha,kmax2);
+[X] = ReconstructRows(XCorrupted, KnownPixels, mu,kmax,tol1,tol2,alpha);
 T=toc;
 
-Alg2_out = reshape(XStore(end,:,:),n_E,n1*n2);
+%Alg2_out = reshape(XStore(end,:,:),n_E,n1*n2);
+Alg2_out = reshape(X,n_E,n1*n2);
 %% Numerical Results
 
 disp('Numerical Results for Hussams Algorithm')
@@ -88,7 +93,7 @@ disp(' ')
 disp(['Completion Run Time:           T = ', num2str(T),'s'])
 disp(' ')
 
-A_full = ErrorResults(XStore,M,Omega,file_name);
+%A_full = ErrorResults(XStore,M,Omega,file_name);
 
 %% Plot images of data sets:
 figure()
