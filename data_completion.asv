@@ -3,7 +3,7 @@ clear
 clc
 close all
 %% Add Folders to Path
-addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\','Tests\','DataFiles\','DataFunctions\')
+addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\','Tests\','DataFiles\','DataFunctions\','SamplingExperiments\')
 
 
 %% Prepare Data
@@ -32,8 +32,8 @@ mu = 2; % Proximal term parameter
 % Loop Stopping Parameters 
 kmax = 50; % Max Iterations for Algorithm 1
 % kmax2 = 30; % Max Iterations for Algorithm 2
-tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
+tol1 = 1e-4; % Tolerence Covergence Parameter for Algorithm 1
+tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
 
 % Unflatten samples
 XCorrupted = reshape(M,n_E,n1,n2);
@@ -73,6 +73,14 @@ colorbar
 title('Colour Map of Completed Data Set Hussam Algorithm(flattened)')
 xlabel('Pixels')
 ylabel('Energy Levels')
+axis off
+
+figure
+imagesc(A_full)
+title('Colour Map of Complete Data Set (flattened)')
+caxis manual
+caxis([Amin Amax]);
+colorbar
 axis off
 
 beep
@@ -129,14 +137,6 @@ disp(['Total Completion Error:            e_c = ', num2str(e_c)])
 disp(' ')
 disp(['Sparse Scan Residual:   res_scan = ', num2str(res_scan)])
 disp(' ')
-
-figure
-imagesc(A_full)
-title('Colour Map of Complete Data Set (flattened)')
-caxis manual
-caxis([Amin Amax]);
-colorbar
-axis off
 
 
 beep
