@@ -1,4 +1,4 @@
-function X_full = ErrorResults(XStore,M,Omega,file_name)
+function ErrorResults(XStore,M,Omega,file_name)
 % Dimension: N=n1*n2
 [totalIts,n_E,N] = size(XStore);
 

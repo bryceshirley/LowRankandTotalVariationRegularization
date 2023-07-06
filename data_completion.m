@@ -11,69 +11,76 @@ addpath ('AlgorithmFunctions\','Algorithms\','TensorOperationFunctions\','Tests\
 % Pick DataSet
 [~,file_name] = PickDataSet('DataFiles');
 
-% Sample dataset
-[M,Omega] = RandomSampleFull(file_name);
+% Sample full dataset: Spiral Samples
+%[M,Omega] = SpiralSampleFull(file_name);
+
+% Sample full dataset: Raster Samples
+[M,Omega] = RasterSampleFull(file_name);
 
 % Flatten Sampled DataSet
 [n_E,n1,n2] = size(M);
 A_sparse = reshape(M,n_E,n1*n2);
 
-
 % Find true undersampling ratio
 p_true = sum(sum(Omega))/numel(Omega);
 
+% Full data set
+full_file_name = ['DataFiles/',file_name(5:17),'_stack_completed.hdf5'];
+complete_data = h5read(full_file_name,'/exchange/data');
+A_full = reshape(complete_data,n_E,[]);
+Amax = max(max(A_full));
+Amin = min(min(A_full));
 
-%% Hussam's Algorithm
-
-% Run Algorithm 2: To Reconstruct Image
-alpha = 0.95;
-mu = 2; % Proximal term parameter
-
-% Loop Stopping Parameters 
-kmax = 50; % Max Iterations for Algorithm 1
-% kmax2 = 30; % Max Iterations for Algorithm 2
-tol1 = 1e-4; % Tolerence Covergence Parameter for Algorithm 1
-tol2 = 1e-4; % Tolerence for Algorithm 2 on alpha k
-
-% Unflatten samples
-XCorrupted = reshape(M,n_E,n1,n2);
-KnownPixels = reshape(Omega,n_E,n1,n2);
-
-% Complete Data:
-tic
-XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
-T=toc;
-
-Alg2_out = reshape(XStore(end,:,:),n_E,n1*n2);
-Amax = max(max(Alg2_out));
-Amin = min(min(Alg2_out));
-%% Numerical Results
-
-disp('Numerical Results for Hussams Algorithm')
-disp(' ')
-disp(['Completion Run Time:           T = ', num2str(T),'s'])
-disp(' ')
-
-A_full = ErrorResults(XStore,M,Omega,file_name);
+% %% Hussam's Algorithm
+% 
+% % Run Algorithm 2: To Reconstruct Image
+% alpha = 0.95;
+% mu = 2; % Proximal term parameter
+% 
+% % Loop Stopping Parameters 
+% kmax = 50; % Max Iterations for Algorithm 1
+% % kmax2 = 30; % Max Iterations for Algorithm 2
+% tol1 = 1e-2; % Tolerence Covergence Parameter for Algorithm 1
+% tol2 = 1e-2; % Tolerence for Algorithm 2 on alpha k
+% 
+% % Unflatten samples
+% XCorrupted = reshape(M,n_E,n1,n2);
+% KnownPixels = reshape(Omega,n_E,n1,n2);
+% 
+% % Complete Data:
+% tic
+% XStore = Algorithm2_3D(XCorrupted,KnownPixels,mu,kmax,tol1,tol2,alpha);
+% T=toc;
+% 
+% Alg2_out = reshape(XStore(end,:,:),n_E,n1*n2);
+% %% Numerical Results
+% 
+% disp('Numerical Results for Hussams Algorithm')
+% disp(' ')
+% disp(['Completion Run Time:           T = ', num2str(T),'s'])
+% disp(' ')
+% 
+% ErrorResults(XStore,M,Omega,file_name);
 
 %% Plot images of data sets:
 figure()
 imagesc(A_sparse)
 colorbar
 axis off
-title('Colour Map of Sparse Data Set (flattened)')
+title({'Colour Map of Sparse Data Set (flattened).', ...
+    ['Sample = ',num2str(round(p_true*100)),'%']})
 xlabel('Pixels')
 ylabel('Energy Levels')
 
-figure()
-imagesc(Alg2_out);
-caxis manual
-caxis([Amin Amax]);
-colorbar
-title('Colour Map of Completed Data Set Hussam Algorithm(flattened)')
-xlabel('Pixels')
-ylabel('Energy Levels')
-axis off
+% figure()
+% imagesc(Alg2_out);
+% caxis manual
+% caxis([Amin Amax]);
+% colorbar
+% title('Colour Map of Completed Data Set Hussam Algorithm(flattened)')
+% xlabel('Pixels')
+% ylabel('Energy Levels')
+% axis off
 
 figure()
 imagesc(A_full)
@@ -83,15 +90,16 @@ caxis([Amin Amax]);
 colorbar
 axis off
 
-beep
-disp('Completion is... Complete!')
-disp(' ')
-disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-disp(' ')
+% beep
+% disp('Completion is... Complete!')
+% disp(' ')
+% disp('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+% disp(' ')
 %% LoopASD Diamonds Algorithm
 % Algorithm Parameters
 tol = 1e-4;
-kmax = 2000;
+kmax = 15000;
+
 r = SelectRank(file_name);
 
 % Complete Data:
