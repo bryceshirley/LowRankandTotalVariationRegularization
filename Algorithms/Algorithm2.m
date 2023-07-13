@@ -18,12 +18,12 @@ function [XRecovered,XStore] = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % XCurroputed is M in the paper.
 
 % Set Initial Guess 
-X0 = XCorrupted; 
+X0 = XCorrupted;
 
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
 lambda1 = norm(XCorrupted,'fro');
-lambda2 = 0.2*lambda1;
+lambda2 = 0.1*lambda1;
 
 % Index Counter
 XStore(1,:,:) = X0;
@@ -31,8 +31,17 @@ i=2;
 
 while alphak > tol2
     % Use Algorithm1 to compute next image iteration
-    [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
-
+    % tic;
+    % [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    % disp('No SVD speed up:')
+    % toc
+    % disp(' ')
+    % tic;
+    [X] = Algorithm1_test_time(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    % disp('SVD speed up:')
+    % toc
+    % disp(' ')
+    % disp(' ')
     % Update parameters
     alphak = alpha*alphak;
     
@@ -40,7 +49,8 @@ while alphak > tol2
     X0 = X;
 
     % Display Image Iteration
-    imshow(X);
+    % figure(2)
+    % imshow(X);
 
     % Store values at each iteration for norm plot
     XStore(i,:,:) = X;

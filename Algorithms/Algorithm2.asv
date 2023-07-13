@@ -18,7 +18,11 @@ function [XRecovered,XStore] = Algorithm2(XCorrupted,P,mu,kmax,tol1,tol2,alpha)
 % XCurroputed is M in the paper.
 
 % Set Initial Guess 
-X0 = XCorrupted; 
+X0 = XCorrupted;
+figure(1)
+subplot(1,3,2)
+[~,S,~]=svd(X0);
+semilogy(diag(S),'r*')
 
 % Calculated additional Parameters for "SolveImageCompletion"
 alphak = alpha;
@@ -31,8 +35,17 @@ i=2;
 
 while alphak > tol2
     % Use Algorithm1 to compute next image iteration
-    [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
-
+    % tic;
+    % [X] = Algorithm1(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    % disp('No SVD speed up:')
+    % toc
+    % disp(' ')
+    % tic;
+    [X] = Algorithm1_test_time(X0, XCorrupted, P, lambda1*(alphak*5e-2),lambda2*(alphak*5e-2), mu,kmax,tol1);
+    % disp('SVD speed up:')
+    % toc
+    % disp(' ')
+    % disp(' ')
     % Update parameters
     alphak = alpha*alphak;
     
@@ -40,10 +53,11 @@ while alphak > tol2
     X0 = X;
 
     % Display Image Iteration
+    figure(2)
     imshow(X);
 
     % Store values at each iteration for norm plot
-    XStore(:,:,) = X;
+    XStore(i,:,:) = X;
     i = i+1;
 end
 

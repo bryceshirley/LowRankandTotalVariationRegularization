@@ -32,7 +32,7 @@ dlgtitle = 'Enter Inputs:';
 if indx == length(list)
     % Manually enter Phantom image size and ratio to be removed
     prompt = {'Enter N:','Enter Ratio of Pixels to Remove:'};
-    definput = {'400','0.8'};  
+    definput = {'200','0.8'};  
     dims = [1 85];
 
     answer = inputdlg(prompt,dlgtitle,dims,definput);
@@ -88,9 +88,9 @@ else
 end
 
 
-%[XCorrupted,P,XOriginal] = CorruptImage(imageMatrix,ratio);
+[XCorrupted,P,XOriginal] = CorruptImage(imageMatrix,ratio);
 
-[P,XCorrupted,ratio]=SpiralSampler(imageMatrix,10,1e-2);
-XOriginal = imageMatrix; 
-disp(ratio)
+% [P,XCorrupted,ratio]=SpiralSampler(imageMatrix,10,1e-2);
+% XOriginal = imageMatrix; 
+% disp(ratio)
 end
